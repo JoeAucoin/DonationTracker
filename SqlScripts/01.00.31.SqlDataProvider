@@ -1,0 +1,186 @@
+﻿
+
+/****** Object:  Table [dbo].[GIBS_DonationTrackerLetterTemplate]    Script Date: 05/02/2016 06:12:28 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[GIBS_DonationTrackerLetterTemplate](
+	[ModuleID] [int] NOT NULL,
+	[LetterID] [int] IDENTITY(1,1) NOT NULL,
+	[LetterName] [nvarchar](100) NOT NULL,
+	[Letter] [nvarchar](max) NULL,
+	[CreatedByUser] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[isActive] [bit] NOT NULL,
+ CONSTRAINT [PK_GIBS_DonationTrackerLetterTemplate] PRIMARY KEY CLUSTERED 
+(
+	[LetterID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[GIBS_DonationTrackerLetterTemplate]  WITH NOCHECK ADD  CONSTRAINT [FK_GIBS_DonationTrackerLetterTemplate_Modules] FOREIGN KEY([ModuleID])
+REFERENCES [dbo].[Modules] ([ModuleID])
+ON DELETE CASCADE
+NOT FOR REPLICATION 
+GO
+
+ALTER TABLE [dbo].[GIBS_DonationTrackerLetterTemplate] CHECK CONSTRAINT [FK_GIBS_DonationTrackerLetterTemplate_Modules]
+GO
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterTemplate_Delete]    Script Date: 05/02/2016 06:12:00 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+create procedure [dbo].[GIBS_DonationTrackerLetterTemplate_Delete]
+
+	
+	@LetterID	  int
+
+	
+as
+
+DELETE FROM [dbo].[GIBS_DonationTrackerLetterTemplate]
+	WHERE [LetterID] = @LetterID
+
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterTemplate_Get]    Script Date: 05/02/2016 06:12:00 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+create procedure [dbo].[GIBS_DonationTrackerLetterTemplate_Get]
+
+	
+	@LetterID	  int
+
+	
+as
+
+SELECT [LetterID]
+      ,[LetterName]
+      ,[Letter]
+      ,[CreatedByUser]
+      ,[CreatedDate]
+      ,[isActive]
+  FROM [dbo].[GIBS_DonationTrackerLetterTemplate]
+	WHERE [LetterID] = @LetterID
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterTemplate_Insert]    Script Date: 05/02/2016 06:12:00 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerLetterTemplate_Insert]
+
+	@ModuleId       int,
+	@LetterName	varchar(500),
+	@Letter        nvarchar(max),
+	@isActive	bit,
+	@UserID         int
+
+as
+
+INSERT INTO [dbo].[GIBS_DonationTrackerLetterTemplate]
+           ([ModuleID]
+           ,[LetterName]
+           ,[Letter]
+           ,[CreatedByUser]
+           ,[CreatedDate]
+           ,[isActive]) 
+values (
+	@ModuleId,
+	@LetterName,
+	@Letter,
+	@UserID,
+	getdate(),
+	@isActive
+)
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterTemplate_List]    Script Date: 05/02/2016 06:12:00 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+create procedure [dbo].[GIBS_DonationTrackerLetterTemplate_List]
+
+	
+	@ModuleID	  int,
+	@isActive int
+
+	
+as
+
+SELECT [LetterID]
+      ,[LetterName]
+      ,[Letter]
+      ,[CreatedByUser]
+      ,[CreatedDate]
+      ,[isActive]
+  FROM [dbo].[GIBS_DonationTrackerLetterTemplate]
+	WHERE [ModuleID] = @ModuleID AND (isActive = 1 or isActive = @isActive)
+
+
+GO
+
+
+
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/** Create Stored Procedures **/
+
+CREATE procedure [dbo].[GIBS_DonationTrackerLetterTemplate_Update]
+
+	@LetterID       int,
+	@LetterName         nvarchar(100),
+	@Letter  nvarchar(max),	
+	@IsActive 	bit
+
+as
+
+update  [dbo].[GIBS_DonationTrackerLetterTemplate]
+set    
+		[LetterName] = @LetterName
+      ,[Letter] = @Letter
+
+      ,[isActive] = @IsActive
+ WHERE  LetterID = @LetterID
+
+GO
+
+

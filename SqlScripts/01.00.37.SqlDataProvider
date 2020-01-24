@@ -1,0 +1,55 @@
+﻿
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDonation]    Script Date: 5/17/2016 7:01:40 AM ******/
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerGetDonation]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDonation]    Script Date: 5/17/2016 7:01:40 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE procedure [dbo].[GIBS_DonationTrackerGetDonation]
+
+	@ModuleId int,
+    @DonationID int
+
+as
+
+SELECT     GIBS_DonationTracker.ModuleID, GIBS_DonationTracker.DonationID, GIBS_DonationTracker.UserID AS DonationUserID, GIBS_DonationTracker.DriveID, 
+                      GIBS_DonationTracker.DonationDate, GIBS_DonationTracker.DonationAmount, GIBS_DonationTracker.DonationType, GIBS_DonationTracker.Followup, 
+                      GIBS_DonationTracker.Notes as DonationNotes, GIBS_DonationTracker.CreatedByUser, GIBS_DonationTracker.CreatedDate, 
+					  GIBS_DonationTrackerDrives.DriveName, GIBS_DonationTrackerDrives.[Description],
+                      'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName,
+                      'DonationUserName' = DU.FirstName + ' ' + DU.LastName,
+					  DU.FirstName, DU.LastName
+					  ,GIBS_DonationTracker.PledgeID
+					  , GIBS_DonationTracker.PledgeDate,
+
+					  GIBS_DonationTracker.DonationFrom, GIBS_DonationTracker.TypeOfDonation, GIBS_DonationTracker.Source
+					  , LetterGenerated = (select case
+         when exists (SELECT 1 FROM GIBS_DonationTrackerLetters WHERE (DonationID = GIBS_DonationTracker.DonationID))
+         then 1
+         else 0
+       end)
+
+	   ,Pledge.NumberOfPayments, Pledge.Frequency, Pledge.PledgeAmount, Pledge.NumberOfPayments * Pledge.PledgeAmount AS TotalAmountPledged, Pledge.StartDate
+
+FROM         GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTracker.CreatedByUser = CU.UserID  
+					  
+left outer join GIBS_DonationTrackerPledge Pledge ON 	GIBS_DonationTracker.PledgeID = Pledge.PledgeID				                       
+                      
+                      
+                      
+                      INNER JOIN
+                      GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId) 
+AND (GIBS_DonationTracker.DonationID = @DonationID)
+GO

@@ -1,0 +1,156 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+
+/** Alter the DataType of a Column **/
+
+ALTER TABLE {objectQualifier}GIBS_DonationTracker ALTER COLUMN DonationDate Date
+
+GO
+
+
+/** Drop Existing Stored Procedures **/
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_DonationTrackerReportSummary]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_DonationTrackerReportSummary
+GO
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_DonationTrackerReportDetail]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_DonationTrackerReportDetail
+GO
+
+/** Create Stored Procedures **/
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}GIBS_DonationTrackerReportSummary
+
+	-- Add the parameters for the stored procedure here
+	@ModuleId int
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+SELECT   {objectQualifier}GIBS_DonationTrackerDrives.DriveID,  
+cast({objectQualifier}GIBS_DonationTrackerDrives.DriveName as varchar(100))     AS DriveName,
+ SUM({objectQualifier}GIBS_DonationTracker.DonationAmount) AS DonationAmount   
+                      
+FROM         {objectQualifier}GIBS_DonationTracker 
+             
+INNER JOIN
+    {objectQualifier}GIBS_DonationTrackerDrives ON {objectQualifier}GIBS_DonationTracker.DriveID = {objectQualifier}GIBS_DonationTrackerDrives.DriveID
+                      
+WHERE     ({objectQualifier}GIBS_DonationTracker.ModuleID = @ModuleId)  
+
+Group by  cast({objectQualifier}GIBS_DonationTrackerDrives.DriveName as varchar(100)), {objectQualifier}GIBS_DonationTrackerDrives.DriveID
+
+
+END
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}GIBS_DonationTrackerReportDetail
+	-- Add the parameters for the stored procedure
+	@ModuleId int,
+	@DriveId int, 
+	@StartDate date,
+	@EndDate date
+
+
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+
+SELECT     {objectQualifier}GIBS_DonationTracker.ModuleID, {objectQualifier}GIBS_DonationTracker.DonationID, {objectQualifier}GIBS_DonationTracker.DriveID, 
+                      {objectQualifier}GIBS_DonationTracker.DonationDate, {objectQualifier}GIBS_DonationTracker.DonationAmount, {objectQualifier}GIBS_DonationTracker.DonationType, 
+					  {objectQualifier}GIBS_DonationTracker.Followup, 
+                      {objectQualifier}GIBS_DonationTracker.Notes As DonationNotes, {objectQualifier}GIBS_DonationTrackerDrives.DriveName,
+ {objectQualifier}GIBS_DonationTracker.UserID,  Prefix, DU.FirstName , DU.LastName, MiddleName, 'DonationUserName' = DU.FirstName + ' ' + DU.LastName, Street, City, Region AS [State], PostalCode,         
+                      {objectQualifier}GIBS_DonationTracker.CreatedByUser, 'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName
+                      ,{objectQualifier}GIBS_DonationTracker.CreatedDate
+                      
+FROM         {objectQualifier}GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON {objectQualifier}GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON {objectQualifier}GIBS_DonationTracker.CreatedByUser = CU.UserID                       
+
+ INNER JOIN
+                      {objectQualifier}GIBS_DonationTrackerDrives ON {objectQualifier}GIBS_DonationTracker.DriveID = {objectQualifier}GIBS_DonationTrackerDrives.DriveID
+
+ INNER JOIN dbo.UserPortals UP ON {objectQualifier}GIBS_DonationTracker.UserID = UP.UserID 
+
+  LEFT JOIN (SELECT PortalID, UserID, PropertyValue Prefix FROM dbo.ProfilePropertyDefinition PD  INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Prefix' ) P_Prefix ON P_Prefix.PortalID = UP.PortalID AND P_Prefix.UserID = {objectQualifier}GIBS_DonationTracker.UserID                     
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue Street FROM dbo.ProfilePropertyDefinition PD  INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Street' ) P_Street ON P_Street.PortalID = UP.PortalID AND P_Street.UserID = {objectQualifier}GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue City FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'City' ) P_City ON P_City.PortalID = UP.PortalID AND P_City.UserID = {objectQualifier}GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue Region FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Region' ) P_Region ON P_Region.PortalID = UP.PortalID AND P_Region.UserID = {objectQualifier}GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue PostalCode FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'PostalCode' ) P_PostalCode ON P_PostalCode.PortalID = UP.PortalID AND P_PostalCode.UserID = {objectQualifier}GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue MiddleName FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'MiddleName' ) P_MiddleName ON P_MiddleName.PortalID = UP.PortalID AND P_MiddleName.UserID = GIBS_DonationTracker.UserID 
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue Suffix FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Suffix' ) P_Suffix ON P_Suffix.PortalID = UP.PortalID AND P_Suffix.UserID = GIBS_DonationTracker.UserID
+                       
+                      
+WHERE     ({objectQualifier}GIBS_DonationTracker.ModuleID = @ModuleId)  
+
+AND  ({objectQualifier}GIBS_DonationTracker.DriveID = @DriveId) 
+AND ({objectQualifier}GIBS_DonationTracker.DonationDate BETWEEN @StartDate and @EndDate)
+
+ORDER BY {objectQualifier}GIBS_DonationTracker.DonationDate
+
+END
+
+GO
+
+
+ALTER PROCEDURE {objectQualifier}GIBS_DonationTrackerReportSummary
+	-- Add the parameters for the stored procedure here
+	@ModuleId int,
+	@StartDate date,
+	@EndDate date
+
+
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+SELECT   {objectQualifier}GIBS_DonationTrackerDrives.DriveID,  
+cast({objectQualifier}GIBS_DonationTrackerDrives.DriveName as varchar(100))     AS DriveName,
+ SUM({objectQualifier}GIBS_DonationTracker.DonationAmount) AS DonationAmount   
+                      
+FROM         {objectQualifier}GIBS_DonationTracker 
+             
+INNER JOIN
+    {objectQualifier}GIBS_DonationTrackerDrives ON {objectQualifier}GIBS_DonationTracker.DriveID = {objectQualifier}GIBS_DonationTrackerDrives.DriveID
+                      
+WHERE     ({objectQualifier}GIBS_DonationTracker.ModuleID = @ModuleId)  
+AND {objectQualifier}GIBS_DonationTracker.DonationDate BETWEEN @StartDate and @EndDate
+
+Group by  cast({objectQualifier}GIBS_DonationTrackerDrives.DriveName as varchar(100)), {objectQualifier}GIBS_DonationTrackerDrives.DriveID
+
+
+END
+
+GO
+
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/

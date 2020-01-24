@@ -1,0 +1,201 @@
+﻿-- RAY ADD SCRIPTS HERE !
+
+
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerUserFullList]'))
+EXEC dbo.sp_executesql @statement = N'
+CREATE View [dbo].[GIBS_DonationTrackerUserFullList]
+AS
+
+--AdditionalFirstName
+--AdditionalName
+--CapacityRating
+--InclinationRating
+--Stage
+--ProspectResearch
+--ProspectManager
+
+SELECT  UP.PortalID, U.UserID, UserName, FirstName, LastName, Displayname, Email, 
+        Street, City , region as [state], PostalCode,  Country, Cell, Telephone,  Company,
+       AdditionalFirstName, AdditionalName, CapacityRating, InclinationRating, Stage, ProspectResearch, ProspectManager
+		
+ FROM        [Users] U 
+  INNER JOIN [UserPortals] UP ON U.UserID = UP.UserID
+  -- access each Profile Property:
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Unit       FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Unit''           ) P_Unit      ON P_Unit.PortalID      = UP.PortalID AND P_Unit.UserID      = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Street     FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Street''         ) P_Street    ON P_Street.PortalID    = UP.PortalID AND P_Street.UserID    = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue City       FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''City''           ) P_City      ON P_City.PortalID      = UP.PortalID AND P_City.UserID      = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue PostalCode FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''PostalCode''     ) P_ZipCode   ON P_ZipCode.PortalID   = UP.PortalID AND P_ZipCode.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Region     FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Region''         ) P_Region    ON P_Region.PortalID    = UP.PortalID AND P_Region.UserID    = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Country    FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Country''        ) P_Country   ON P_Country.PortalID   = UP.PortalID AND P_Country.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Cell       FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Cell''           ) P_Cell      ON P_Cell.PortalID      = UP.PortalID AND P_Cell.UserID      = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Telephone  FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Telephone''      ) P_Telephone ON P_Telephone.PortalID = UP.PortalID AND P_Telephone.UserID = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Telefax    FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Fax''            ) P_Telefax   ON P_Telefax.PortalID   = UP.PortalID AND P_Telefax.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue IM         FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''IM''             ) P_IM        ON P_IM.PortalID        = UP.PortalID AND P_IM.UserID        = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Website    FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Website''        ) P_Website   ON P_Website.PortalID   = UP.PortalID AND P_Website.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue [Language] FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''PreferredLocale'') P_Language  ON P_Language.PortalID  = UP.PortalID AND P_Language.UserID  = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Company    FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Company''        ) P_Company   ON P_Company.PortalID   = UP.PortalID AND P_Company.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue AdditionalFirstName		FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''AdditionalFirstName'') P_AdditionalFirstName   ON P_AdditionalFirstName.PortalID   = UP.PortalID AND P_AdditionalFirstName.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue AdditionalName			FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''AdditionalName''        ) P_AdditionalName   ON P_AdditionalName.PortalID   = UP.PortalID AND P_AdditionalName.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue CapacityRating			FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''CapacityRating''        ) P_CapacityRating   ON P_CapacityRating.PortalID   = UP.PortalID AND P_CapacityRating.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue InclinationRating		FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''InclinationRating''        ) P_InclinationRating   ON P_InclinationRating.PortalID   = UP.PortalID AND P_InclinationRating.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Stage					FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''Stage''        ) P_Stage   ON P_Stage.PortalID   = UP.PortalID AND P_Stage.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue ProspectResearch			FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''ProspectResearch''        ) P_ProspectResearch   ON P_ProspectResearch.PortalID   = UP.PortalID AND P_ProspectResearch.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue ProspectManager			FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''ProspectManager''        ) P_ProspectManager   ON P_ProspectManager.PortalID   = UP.PortalID AND P_ProspectManager.UserID   = U.UserID
+    LEFT  JOIN (SELECT PortalID, UserID, PropertyValue altstate					FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N''AltState''        ) P_ProspectState   ON P_ProspectState.PortalID   = UP.PortalID AND P_ProspectState.UserID   = U.UserID
+   
+'
+GO
+
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerUserFullListSearch]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'
+
+CREATE procedure [dbo].[GIBS_DonationTrackerUserFullListSearch](
+@PortalID int,	@PageIndex int,	@PageSize INT,@IncludeDeleted  bit,@SuperUsersOnly  bit,@searchField varchar(100),
+@searchCriteria varchar(100),@orderByField varchar(100),@OrderByDirection varchar(4))
+as begin
+-- Set the page bounds
+--set @PageIndex=2
+--set @PageSize=10
+DECLARE @PageLowerBound INT,@PageUpperBound INT,@RowsToReturn int
+EXEC dbo.CalculatePagingInformation @PageIndex, @PageSize, @RowsToReturn output, @PageLowerBound output, @PageUpperBound output
+--set @searchField		= N''''
+--set @searchCriteria		= N''''
+--set @orderByField		= N''''
+--set @OrderByDirection	= N''''
+;
+WITH [tmpUsers] AS 
+(
+	select  ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS rowid,
+		* 
+	from GIBS_DonationTrackerUserFullList
+	where (1=1)
+	or
+		( 
+			( 
+				@searchField = ''firstname'' AND  firstname like @searchCriteria +''%''
+			)
+			OR
+			( 
+				@searchField = ''lastname'' AND  lastname like @searchCriteria +''%''
+			)
+			OR
+			(	 
+				@searchField = ''company'' AND  company like @searchCriteria +''%''
+			)
+			OR
+			( 
+				@searchField = ''city'' AND  city like @searchCriteria +''%''
+			)
+			OR
+			( 
+				@searchField = ''state'' AND  state like @searchCriteria +''%''
+			)
+		)
+)
+select * from [tmpusers] where  rowid > @PageLowerBound AND rowid < @PageUpperBound
+	order by
+		CASE WHEN @orderByField		= ''lastname'' AND @OrderByDirection = ''ASC'' THEN lastname END ASC,
+		CASE WHEN @orderByField		= ''lastname'' AND @OrderByDirection = ''DESC'' THEN lastname END desc, 
+		
+		CASE WHEN @orderByField		= ''firstname'' AND @OrderByDirection = ''ASC'' THEN firstname END ASC,
+		CASE WHEN @orderByField		= ''firstname'' AND @OrderByDirection = ''DESC'' THEN firstname END desc ,
+    
+		CASE WHEN @orderByField		= ''company'' AND @OrderByDirection = ''ASC'' THEN company END ASC,
+		CASE WHEN @orderByField		= ''company'' AND @OrderByDirection = ''DESC'' THEN company END desc, 
+		
+		CASE WHEN @orderByField		= ''city'' AND @OrderByDirection = ''ASC'' THEN city END ASC,
+		CASE WHEN @orderByField		= ''city'' AND @OrderByDirection = ''DESC'' THEN city END desc ,
+		
+		CASE WHEN @orderByField		= ''state'' AND @OrderByDirection = ''ASC'' THEN state END ASC,
+		CASE WHEN @orderByField		= ''state'' AND @OrderByDirection = ''DESC'' THEN state END desc 
+end' 
+END
+GO
+
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUserFullListSearch]    Script Date: 10/4/2015 7:56:41 AM ******/
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerUserFullListSearch]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUserFullListSearch]    Script Date: 10/4/2015 7:56:41 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+create procedure [dbo].[GIBS_DonationTrackerUserFullListSearch](
+@PortalID int,	@PageIndex int,	@PageSize INT,@IncludeDeleted  bit,@SuperUsersOnly  bit,@searchField varchar(100),
+@searchCriteria varchar(100),@orderByField varchar(100),@OrderByDirection varchar(4))
+as begin
+-- Set the page bounds
+--set @PageIndex=2
+--set @PageSize=10
+DECLARE @PageLowerBound INT,@PageUpperBound INT,@RowsToReturn int
+EXEC dbo.CalculatePagingInformation @PageIndex, @PageSize, @RowsToReturn output, @PageLowerBound output, @PageUpperBound output
+--set @searchField		= N''
+--set @searchCriteria		= N''
+--set @orderByField		= N''
+--set @OrderByDirection	= N''
+;
+WITH [tmpUsers] AS 
+(
+	select  ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS rowid,
+		* 
+	from GIBS_DonationTrackerUserFullList
+	where (1=1)
+	or
+		( 
+			( 
+				@searchField = 'firstname' AND  firstname like @searchCriteria +'%'
+			)
+			OR
+			( 
+				@searchField = 'lastname' AND  lastname like @searchCriteria +'%'
+			)
+			OR
+			(	 
+				@searchField = 'company' AND  company like @searchCriteria +'%'
+			)
+			OR
+			( 
+				@searchField = 'city' AND  city like @searchCriteria +'%'
+			)
+			OR
+			( 
+				@searchField = 'state' AND  state like @searchCriteria +'%'
+			)
+		)
+)
+select * from [tmpusers] where  rowid > @PageLowerBound AND rowid < @PageUpperBound
+	order by
+		CASE WHEN @orderByField		= 'lastname' AND @OrderByDirection = 'ASC' THEN lastname END ASC,
+		CASE WHEN @orderByField		= 'lastname' AND @OrderByDirection = 'DESC' THEN lastname END desc, 
+		
+		CASE WHEN @orderByField		= 'firstname' AND @OrderByDirection = 'ASC' THEN firstname END ASC,
+		CASE WHEN @orderByField		= 'firstname' AND @OrderByDirection = 'DESC' THEN firstname END desc ,
+    
+		CASE WHEN @orderByField		= 'company' AND @OrderByDirection = 'ASC' THEN company END ASC,
+		CASE WHEN @orderByField		= 'company' AND @OrderByDirection = 'DESC' THEN company END desc, 
+		
+		CASE WHEN @orderByField		= 'city' AND @OrderByDirection = 'ASC' THEN city END ASC,
+		CASE WHEN @orderByField		= 'city' AND @OrderByDirection = 'DESC' THEN city END desc ,
+		
+		CASE WHEN @orderByField		= 'state' AND @OrderByDirection = 'ASC' THEN state END ASC,
+		CASE WHEN @orderByField		= 'state' AND @OrderByDirection = 'DESC' THEN state END desc 
+end
+GO
+
+

@@ -1,0 +1,1196 @@
+﻿
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_GIBS_DonationTrackerLetters_GIBS_DonationTrackerLetters]') AND parent_object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetters]'))
+ALTER TABLE [dbo].[GIBS_DonationTrackerLetters] DROP CONSTRAINT [FK_GIBS_DonationTrackerLetters_GIBS_DonationTrackerLetters]
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_GIBS_DonationTrackerLetters_CreatedDate]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GIBS_DonationTrackerLetters] DROP CONSTRAINT [DF_GIBS_DonationTrackerLetters_CreatedDate]
+END
+
+GO
+
+
+
+/****** Object:  Table [dbo].[GIBS_DonationTracker_Merged]    Script Date: 10/28/2015 09:31:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTracker_Merged]') AND type in (N'U'))
+DROP TABLE [dbo].[GIBS_DonationTracker_Merged]
+GO
+
+/****** Object:  Table [dbo].[GIBS_DonationTracker_Merged_UserDonor]    Script Date: 10/28/2015 09:31:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTracker_Merged_UserDonor]') AND type in (N'U'))
+DROP TABLE [dbo].[GIBS_DonationTracker_Merged_UserDonor]
+GO
+
+/****** Object:  Table [dbo].[GIBS_DonationTrackerLetters]    Script Date: 10/28/2015 09:31:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetters]') AND type in (N'U'))
+DROP TABLE [dbo].[GIBS_DonationTrackerLetters]
+GO
+
+
+
+/****** Object:  Table [dbo].[GIBS_DonationTracker_Merged]    Script Date: 10/28/2015 09:31:27 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[GIBS_DonationTracker_Merged](
+	[ModuleID] [int] NOT NULL,
+	[DonationID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [int] NOT NULL,
+	[DriveID] [int] NULL,
+	[DonationDate] [date] NULL,
+	[DonationAmount] [money] NULL,
+	[DonationType] [nvarchar](255) NULL,
+	[Followup] [bit] NULL,
+	[Notes] [ntext] NULL,
+	[CreatedByUser] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+
+
+/****** Object:  Table [dbo].[GIBS_DonationTracker_Merged_UserDonor]    Script Date: 10/28/2015 09:31:27 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[GIBS_DonationTracker_Merged_UserDonor](
+	[MergedUserDonorID] [int] IDENTITY(1,1) NOT NULL,
+	[Userid] [int] NULL,
+	[MergedWithUserID] [int] NULL
+) ON [PRIMARY]
+
+GO
+
+
+
+/****** Object:  Table [dbo].[GIBS_DonationTrackerLetters]    Script Date: 10/28/2015 09:31:27 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[GIBS_DonationTrackerLetters](
+	[LetterID] [int] IDENTITY(1,1) NOT NULL,
+	[DonationID] [int] NOT NULL,
+	[Letter] [varchar](max) NULL,
+	[PDFFile] [varbinary](max) NULL,
+	[CreatedByUser] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_GIBS_DonationTrackerLetters] PRIMARY KEY CLUSTERED 
+(
+	[LetterID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[GIBS_DonationTrackerLetters]  WITH CHECK ADD  CONSTRAINT [FK_GIBS_DonationTrackerLetters_GIBS_DonationTrackerLetters] FOREIGN KEY([LetterID])
+REFERENCES [dbo].[GIBS_DonationTrackerLetters] ([LetterID])
+GO
+
+ALTER TABLE [dbo].[GIBS_DonationTrackerLetters] CHECK CONSTRAINT [FK_GIBS_DonationTrackerLetters_GIBS_DonationTrackerLetters]
+GO
+
+ALTER TABLE [dbo].[GIBS_DonationTrackerLetters] ADD  CONSTRAINT [DF_GIBS_DonationTrackerLetters_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Donation_Merge]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Donation_Merge]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Donation_Merge]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerAddDonation]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerAddDonation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerAddDonation]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerAddDrive]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerAddDrive]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerAddDrive]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerDeleteDonation]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerDeleteDonation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerDeleteDonation]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDonation]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerGetDonation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerGetDonation]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDrive]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerGetDrive]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerGetDrive]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDrives]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerGetDrives]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerGetDrives]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetUserDonations]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerGetUserDonations]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerGetUserDonations]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterAdd]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerLetterAdd]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterGet]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerLetterGet]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterUpdate]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerLetterUpdate]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerReportDetail]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerReportDetail]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerReportDetail]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerReportSearch]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerReportSearch]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerReportSearch]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerReportSummary]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerReportSummary]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerReportSummary]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUpdateDonation]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerUpdateDonation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerUpdateDonation]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUpdateDrive]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerUpdateDrive]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerUpdateDrive]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUserFullListSearch]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerUserFullListSearch]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerUserFullListSearch]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUserSearchRecordCount]    Script Date: 10/28/2015 09:41:18 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerUserSearchRecordCount]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerUserSearchRecordCount]
+GO
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Donation_Merge]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE procedure [dbo].[GIBS_Donation_Merge]
+(
+	@MasterClientID int,@ChildClientID int
+)
+as
+BEGIN
+begin tran
+	--declare @MasterClientID int,@ChildClientID int
+	--set @masterclientid=8918
+	--set @childclientid=8917
+	-- Take the child data and put it in seperate tables for historical purposes
+	-- gibs_fbclients
+	SET IDENTITY_INSERT GIBS_DonationTracker_merged ON
+ 	        insert into GIBS_DonationTracker_merged(ModuleID,DonationID,UserID,DriveID,
+				DonationDate,DonationAmount,DonationType,Followup,Notes,CreatedByUser,CreatedDate)
+			select ModuleID,DonationID,UserID,DriveID,
+				DonationDate,DonationAmount,DonationType,Followup,Notes,CreatedByUser,CreatedDate 
+			from GIBS_DonationTracker where userid=@ChildClientID
+	SET IDENTITY_INSERT GIBS_DonationTracker_merged off
+	-- now assign all donations from the child to the master
+	update GIBS_DonationTracker set userid=@MasterClientID where userid=@ChildClientID
+	-- create a record in the lynking table
+	insert into GIBS_DonationTracker_Merged_UserDonor
+	values(@ChildClientID,@MasterClientID)
+	-- now turn off the child user account and append MERGED to the name
+	--declare @portalid int
+	--select @portalid =portalid from userportals where userid=@childclientid
+	--exec DeleteUserPortal @childclientid,@portalid
+	UPDATE dbo.Users SET IsDeleted = 1 	WHERE  UserId = @childclientid
+	select 1
+	commit tran
+	--rollback tran
+END
+
+/*
+select * from GIBS_DonationTracker
+
+select * from GIBS_DonationTrackerDrives
+
+--select * from donations
+
+select * from users
+
+select * from userprofile
+
+select * from ProfilePropertyDefinition 
+select u.userid,propertyname,propertyvalue from users u inner join userprofile up on u.userid=up.userid inner join  ProfilePropertyDefinition ppd on up.PropertyDefinitionID=ppd.PropertyDefinitionID
+where len(propertyvalue)>0
+and propertyname='Company Name' and len(propertyvalue)>0
+order by userid
+select distinct propertyname from users u inner join userprofile up on u.userid=up.userid inner join  ProfilePropertyDefinition ppd on up.PropertyDefinitionID=ppd.PropertyDefinitionID
+where len(propertyvalue)>0
+--order by userid
+*/
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerAddDonation]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+create procedure [dbo].[GIBS_DonationTrackerAddDonation]
+
+	@ModuleId       int,
+	@DonationUserID         int,
+	@DriveID         int,
+	@DonationDate	datetime,
+	@DonationAmount money,
+	@DonationType varchar(100),
+	@Followup 	bit,
+	@DonationNotes		ntext,
+	@UserId	int
+	
+	
+
+as
+
+insert into GIBS_DonationTracker (
+	ModuleID, 
+	UserID, 
+	DriveID, 
+	DonationDate, 
+	DonationAmount, 
+	DonationType, 
+	Followup, 
+	Notes, 
+	CreatedByUser, 
+	CreatedDate
+) 
+values (
+	@ModuleId,
+	@DonationUserID,
+	@DriveID,
+	@DonationDate,
+	@DonationAmount,
+	@DonationType,
+	@Followup,
+	@DonationNotes,
+	@UserId,
+	getdate()
+)
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerAddDrive]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+create procedure [dbo].[GIBS_DonationTrackerAddDrive]
+
+	@ModuleId       int,
+	@DriveName	varchar(500),
+	@DriveDate datetime,
+	@Description        ntext,
+	@isActive	bit,
+	@UserID         int
+
+as
+
+insert into GIBS_DonationTrackerDrives (
+	ModuleId,
+	DriveName,
+	DriveDate,
+	[Description],
+	isActive,
+	CreatedByUser,
+	CreatedDate
+) 
+values (
+	@ModuleId,
+	@DriveName,
+	@DriveDate,
+	@Description,
+	@isActive,
+	@UserID,
+	getdate()
+)
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerDeleteDonation]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+create procedure [dbo].[GIBS_DonationTrackerDeleteDonation]
+
+	@ModuleId       int,
+    @DonationID         int
+
+as
+
+delete
+from   GIBS_DonationTracker
+where  ModuleId = @ModuleId
+and    DonationID = @DonationID
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDonation]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE procedure [dbo].[GIBS_DonationTrackerGetDonation]
+
+	@ModuleId int,
+    @DonationID int
+
+as
+
+SELECT     GIBS_DonationTracker.ModuleID, GIBS_DonationTracker.DonationID, GIBS_DonationTracker.UserID AS DonationUserID, GIBS_DonationTracker.DriveID, 
+                      GIBS_DonationTracker.DonationDate, GIBS_DonationTracker.DonationAmount, GIBS_DonationTracker.DonationType, GIBS_DonationTracker.Followup, 
+                      GIBS_DonationTracker.Notes as DonationNotes, GIBS_DonationTracker.CreatedByUser, GIBS_DonationTracker.CreatedDate, 
+					  GIBS_DonationTrackerDrives.DriveName, GIBS_DonationTrackerDrives.[Description],
+                      'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName,
+                      'DonationUserName' = DU.FirstName + ' ' + DU.LastName,
+					  DU.FirstName, DU.LastName
+FROM         GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTracker.CreatedByUser = CU.UserID                       
+                      
+                      
+                      
+                      INNER JOIN
+                      GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId) 
+AND (GIBS_DonationTracker.DonationID = @DonationID)
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDrive]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+create procedure [dbo].[GIBS_DonationTrackerGetDrive]
+
+	@ModuleId int,
+    @DriveID int
+
+as
+
+select ModuleId,
+       DriveID,
+	   DriveName,
+	   DriveDate,
+       [Description],
+       CreatedByUser,
+       CreatedDate,
+	   isActive,
+       'CreatedByUserName' = Users.FirstName + ' ' + Users.LastName
+from GIBS_DonationTrackerDrives
+left outer join Users on GIBS_DonationTrackerDrives.CreatedByUser = Users.UserId
+where  ModuleId = @ModuleId
+and DriveID = @DriveID
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDrives]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/************************************************************/
+/*****              DRIVES                     *****/
+/************************************************************/
+
+CREATE procedure [dbo].[GIBS_DonationTrackerGetDrives]
+
+	@ModuleId int,
+	@isActive int
+
+as
+
+select ModuleId,
+       DriveID,
+       DriveName,
+	   DriveDate,
+	   [Description],
+       CreatedByUser,
+       CreatedDate,
+	   isActive,
+       'CreatedByUserName' = Users.FirstName + ' ' + Users.LastName
+from GIBS_DonationTrackerDrives
+left outer join Users on GIBS_DonationTrackerDrives.CreatedByUser = Users.UserId
+where  ModuleId = @ModuleId AND (isActive = 1 or isActive = @isActive)
+order by  CAST([DriveName] AS VARCHAR(500))
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetUserDonations]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/** Create Stored Procedures **/
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerGetUserDonations]
+
+	@ModuleId int,
+	@DonationUserID int
+
+as
+
+SELECT     GIBS_DonationTracker.ModuleID, GIBS_DonationTracker.DonationID, GIBS_DonationTracker.UserID, GIBS_DonationTracker.DriveID, 
+                      GIBS_DonationTracker.DonationDate, GIBS_DonationTracker.DonationAmount, GIBS_DonationTracker.DonationType, GIBS_DonationTracker.Followup, 
+                      GIBS_DonationTracker.Notes as DonationNotes, GIBS_DonationTracker.CreatedByUser, GIBS_DonationTracker.CreatedDate, GIBS_DonationTrackerDrives.DriveName,
+                      'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName,
+                      'DonationUserName' = DU.FirstName + ' ' + DU.LastName
+FROM         GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTracker.CreatedByUser = CU.UserID                       
+                      
+                      
+                      
+                      INNER JOIN
+                      GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId) 
+AND (GIBS_DonationTracker.UserID = @DonationUserID) 
+ORDER BY DonationDate DESC
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterAdd]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerLetterAdd]
+
+	@DonationID       int,
+	@Letter varchar(max),
+
+	@CreatedByUser         int
+
+as
+
+INSERT INTO [dbo].[GIBS_DonationTrackerLetters]
+           ([DonationID]
+           ,[Letter]
+
+           ,[CreatedByUser]
+           ,[CreatedDate])
+
+values (
+	@DonationID,
+	@Letter,
+	@CreatedByUser,
+	getdate()
+)
+
+select SCOPE_IDENTITY()
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterGet]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+create procedure [dbo].[GIBS_DonationTrackerLetterGet]
+
+	
+	@LetterID	  int
+
+	
+as
+
+SELECT [LetterID]
+      ,[DonationID]
+      ,[Letter]
+      ,[PDFFile]
+      ,[CreatedByUser]
+      ,[CreatedDate]
+  FROM [dbo].[GIBS_DonationTrackerLetters]
+	WHERE [LetterID] = @LetterID
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterUpdate]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+create procedure [dbo].[GIBS_DonationTrackerLetterUpdate]
+
+	
+	@LetterID	  int,
+	@Letter varbinary(max),
+	@PDFFile varbinary(max)
+	
+as
+
+UPDATE [dbo].[GIBS_DonationTrackerLetters]
+   SET 
+      [Letter] = @Letter
+      ,[PDFFile] = @PDFFile
+
+ 
+	WHERE [LetterID] = @LetterID
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerReportDetail]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE  [dbo].[GIBS_DonationTrackerReportDetail]
+	-- Add the parameters for the stored procedure
+	@ModuleId int,
+	@DriveId int, 
+	@StartDate date,
+	@EndDate date
+
+
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+
+SELECT     GIBS_DonationTracker.ModuleID, GIBS_DonationTracker.DonationID, GIBS_DonationTracker.DriveID, 
+                      GIBS_DonationTracker.DonationDate, GIBS_DonationTracker.DonationAmount, GIBS_DonationTracker.DonationType, 
+					  GIBS_DonationTracker.Followup, 
+                      GIBS_DonationTracker.Notes As DonationNotes, GIBS_DonationTrackerDrives.DriveName,
+   Prefix, GIBS_DonationTracker.UserID,  COALESCE(Company, '') AS Company, 
+   DU.FirstName , DU.LastName, MiddleName, 'DonationUserName' = DU.FirstName + ' ' + DU.LastName, 
+   COALESCE(Suffix, '') AS Suffix,
+   Street, City, Region AS [State], PostalCode,       
+                      GIBS_DonationTracker.CreatedByUser, 'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName
+                      ,GIBS_DonationTracker.CreatedDate
+                      
+FROM         GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTracker.CreatedByUser = CU.UserID                       
+
+ INNER JOIN
+                      GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+
+ INNER JOIN dbo.UserPortals UP ON GIBS_DonationTracker.UserID = UP.UserID 
+
+LEFT JOIN (SELECT PortalID, UserID, PropertyValue Company FROM dbo.ProfilePropertyDefinition PD  INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Company' ) P_Company ON P_Company.PortalID = UP.PortalID AND P_Company.UserID = GIBS_DonationTracker.UserID
+
+  LEFT JOIN (SELECT PortalID, UserID, PropertyValue Prefix FROM dbo.ProfilePropertyDefinition PD  INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Prefix' ) P_Prefix ON P_Prefix.PortalID = UP.PortalID AND P_Prefix.UserID = GIBS_DonationTracker.UserID                     
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue Street FROM dbo.ProfilePropertyDefinition PD  INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Street' ) P_Street ON P_Street.PortalID = UP.PortalID AND P_Street.UserID = GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue City FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'City' ) P_City ON P_City.PortalID = UP.PortalID AND P_City.UserID = GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue Region FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Region' ) P_Region ON P_Region.PortalID = UP.PortalID AND P_Region.UserID = GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue PostalCode FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'PostalCode' ) P_PostalCode ON P_PostalCode.PortalID = UP.PortalID AND P_PostalCode.UserID = GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue MiddleName FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'MiddleName' ) P_MiddleName ON P_MiddleName.PortalID = UP.PortalID AND P_MiddleName.UserID = GIBS_DonationTracker.UserID 
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue Suffix FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Suffix' ) P_Suffix ON P_Suffix.PortalID = UP.PortalID AND P_Suffix.UserID = GIBS_DonationTracker.UserID
+                       
+                      
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId)  
+
+AND  (GIBS_DonationTracker.DriveID = @DriveId) 
+AND (GIBS_DonationTracker.DonationDate BETWEEN @StartDate and @EndDate)
+
+ORDER BY GIBS_DonationTracker.DonationDate
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerReportSearch]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE  [dbo].[GIBS_DonationTrackerReportSearch]
+	-- Add the parameters for the stored procedure
+	@ModuleId int,
+	--@DriveId int, 
+	@StartDate date,
+	@EndDate date,
+	@DonationAmount float
+
+
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+
+SELECT     GIBS_DonationTracker.ModuleID, GIBS_DonationTracker.DonationID, GIBS_DonationTracker.DriveID, 
+                      GIBS_DonationTracker.DonationDate, GIBS_DonationTracker.DonationAmount, GIBS_DonationTracker.DonationType, 
+					  GIBS_DonationTracker.Followup, 
+                      GIBS_DonationTracker.Notes As DonationNotes, GIBS_DonationTrackerDrives.DriveName,
+   Prefix, GIBS_DonationTracker.UserID,  COALESCE(Company, '') AS Company, 
+   DU.FirstName , DU.LastName, MiddleName, 'DonationUserName' = DU.FirstName + ' ' + DU.LastName, 
+   COALESCE(Suffix, '') AS Suffix,
+   Street, City, Region AS [State], PostalCode,       
+                      GIBS_DonationTracker.CreatedByUser, 'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName
+                      ,GIBS_DonationTracker.CreatedDate
+                      
+FROM         GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTracker.CreatedByUser = CU.UserID                       
+
+ INNER JOIN
+                      GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+
+ INNER JOIN dbo.UserPortals UP ON GIBS_DonationTracker.UserID = UP.UserID 
+
+LEFT JOIN (SELECT PortalID, UserID, PropertyValue Company FROM dbo.ProfilePropertyDefinition PD  INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Company' ) P_Company ON P_Company.PortalID = UP.PortalID AND P_Company.UserID = GIBS_DonationTracker.UserID
+
+  LEFT JOIN (SELECT PortalID, UserID, PropertyValue Prefix FROM dbo.ProfilePropertyDefinition PD  INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Prefix' ) P_Prefix ON P_Prefix.PortalID = UP.PortalID AND P_Prefix.UserID = GIBS_DonationTracker.UserID                     
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue Street FROM dbo.ProfilePropertyDefinition PD  INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Street' ) P_Street ON P_Street.PortalID = UP.PortalID AND P_Street.UserID = GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue City FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'City' ) P_City ON P_City.PortalID = UP.PortalID AND P_City.UserID = GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue Region FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Region' ) P_Region ON P_Region.PortalID = UP.PortalID AND P_Region.UserID = GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue PostalCode FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'PostalCode' ) P_PostalCode ON P_PostalCode.PortalID = UP.PortalID AND P_PostalCode.UserID = GIBS_DonationTracker.UserID
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue MiddleName FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'MiddleName' ) P_MiddleName ON P_MiddleName.PortalID = UP.PortalID AND P_MiddleName.UserID = GIBS_DonationTracker.UserID 
+ LEFT JOIN (SELECT PortalID, UserID, PropertyValue Suffix FROM dbo.ProfilePropertyDefinition PD INNER JOIN dbo.UserProfile P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Suffix' ) P_Suffix ON P_Suffix.PortalID = UP.PortalID AND P_Suffix.UserID = GIBS_DonationTracker.UserID
+                       
+                      
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId)  
+
+--AND  (GIBS_DonationTracker.DriveID = @DriveId) 
+AND (GIBS_DonationTracker.DonationDate BETWEEN @StartDate and @EndDate)
+AND (GIBS_DonationTracker.DonationAmount >= @DonationAmount)
+
+ORDER BY GIBS_DonationTracker.DonationDate desc
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerReportSummary]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GIBS_DonationTrackerReportSummary]
+	-- Add the parameters for the stored procedure here
+	@ModuleId int,
+	@StartDate date,
+	@EndDate date
+
+
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+SELECT   GIBS_DonationTrackerDrives.DriveID,  
+cast(GIBS_DonationTrackerDrives.DriveName as varchar(100))     AS DriveName,
+ SUM(GIBS_DonationTracker.DonationAmount) AS DonationAmount   
+                      
+FROM         GIBS_DonationTracker 
+             
+INNER JOIN
+    GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+                      
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId)  
+AND GIBS_DonationTracker.DonationDate BETWEEN @StartDate and @EndDate
+
+Group by  cast(GIBS_DonationTrackerDrives.DriveName as varchar(100)), GIBS_DonationTrackerDrives.DriveID
+
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUpdateDonation]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+create procedure [dbo].[GIBS_DonationTrackerUpdateDonation]
+
+	@ModuleId       int,
+	@DonationID         int,
+	@DriveID         int,
+	@DonationDate	datetime,
+	@DonationAmount money,
+	@DonationType varchar(100),
+	@Followup 	bit,
+	@DonationNotes		ntext
+
+as
+
+update GIBS_DonationTracker
+set    DriveID       = @DriveID,
+		DonationDate = @DonationDate,
+		DonationAmount = @DonationAmount,
+		DonationType = @DonationType,
+		Followup = @Followup,
+		Notes = @DonationNotes
+		
+where  ModuleId = @ModuleId
+and    DonationID = @DonationID
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUpdateDrive]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/** Create Stored Procedures **/
+
+Create procedure [dbo].[GIBS_DonationTrackerUpdateDrive]
+
+	@ModuleId       int,
+	@DriveID         int,
+	@DriveName  ntext,
+	@DriveDate	datetime,
+	@Description		ntext,
+	@IsActive 	bit
+
+as
+
+update GIBS_DonationTrackerDrives
+set    
+		DriveName = @DriveName,
+		DriveDate = @DriveDate,
+		[Description] = @Description,
+		IsActive = @IsActive
+		
+where  ModuleId = @ModuleId
+and    DriveID = @DriveID
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUserFullListSearch]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerUserFullListSearch](
+@PortalID int,	@PageIndex int,	@PageSize INT, @searchField varchar(100),
+@searchCriteria varchar(100),@orderByField varchar(100),@OrderByDirection
+varchar(4))
+as begin
+
+declare @CurrentPage int
+--set @PageIndex=0
+--set @PageIndex=@PageIndex+1
+set @CurrentPage=@PageIndex
+--set @PageSize=10
+
+Declare @FirstRec int
+Declare @LastRec int
+if(@PageSize = -1)
+begin
+	Set @FirstRec = -1;
+	Set @LastRec = -1;
+end
+else
+begin
+	Set @FirstRec = (@CurrentPage - 1) * @PageSize
+	Set @LastRec = (@CurrentPage * @PageSize + 1) end
+--select @firstrec,@lastrec	
+	
+--set @searchField		= N'lastname'
+--set @searchCriteria		= N'r'
+--set @orderByField		= N'firstname'
+--set @OrderByDirection	= N'asc'
+
+declare @tempTable TABLE(rowid int not null identity(1,1),
+	PortalID int, userID int , UserName varchar(100), FirstName varchar(100), LastName varchar(100), Displayname varchar(100), Email varchar(100), 
+    Street varchar(100), City varchar(100) , [state] varchar(100), PostalCode varchar(100),  Country varchar(100), Cell varchar(100), Telephone varchar(100),  Company varchar(100),
+    AdditionalFirstName varchar(100), AdditionalName varchar(100), CapacityRating varchar(100), InclinationRating varchar(100), Stage varchar(100), ProspectResearch varchar(100), ProspectManager varchar(100)
+	)
+insert into @tempTable
+SELECT   UP.PortalID, U.UserID, UserName, FirstName, LastName, Displayname,
+Email, 
+        Street, City , region as [state], PostalCode,  Country, Cell, Telephone,  Company,
+       AdditionalFirstName, AdditionalName, CapacityRating, InclinationRating, Stage, ProspectResearch, ProspectManager
+ 		
+ FROM        [Users] U 
+  INNER JOIN [UserPortals] UP ON U.UserID = UP.UserID
+  -- access each Profile Property:
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Unit       FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Unit'           ) P_Unit      ON P_Unit.PortalID      = UP.PortalID AND
+P_Unit.UserID      = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Street     FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Street'         ) P_Street    ON P_Street.PortalID    = UP.PortalID AND
+P_Street.UserID    = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue City       FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'City'           ) P_City      ON P_City.PortalID      = UP.PortalID AND
+P_City.UserID      = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue PostalCode FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'PostalCode'     ) P_ZipCode   ON P_ZipCode.PortalID   = UP.PortalID AND
+P_ZipCode.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Region     FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Region'         ) P_Region    ON P_Region.PortalID    = UP.PortalID AND
+P_Region.UserID    = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Country    FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Country'        ) P_Country   ON P_Country.PortalID   = UP.PortalID AND
+P_Country.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Cell       FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Cell'           ) P_Cell      ON P_Cell.PortalID      = UP.PortalID AND
+P_Cell.UserID      = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Telephone  FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Telephone'      ) P_Telephone ON P_Telephone.PortalID = UP.PortalID AND
+P_Telephone.UserID = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Telefax    FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Fax'
+) P_Telefax   ON P_Telefax.PortalID   = UP.PortalID AND P_Telefax.UserID   =
+U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue IM         FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'IM'
+) P_IM        ON P_IM.PortalID        = UP.PortalID AND P_IM.UserID        =
+U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Website    FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Website'        ) P_Website   ON P_Website.PortalID   = UP.PortalID AND
+P_Website.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue [Language] FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'PreferredLocale') P_Language  ON P_Language.PortalID  = UP.PortalID AND P_Language.UserID  = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Company    FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Company'        ) P_Company   ON P_Company.PortalID   = UP.PortalID AND
+P_Company.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue
+AdditionalFirstName		FROM [ProfilePropertyDefinition] PD INNER
+JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID
+WHERE PropertyName = N'AdditionalFirstName') P_AdditionalFirstName   ON
+P_AdditionalFirstName.PortalID   = UP.PortalID AND
+P_AdditionalFirstName.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue AdditionalName FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'AdditionalName'        ) P_AdditionalName   ON P_AdditionalName.PortalID
+= UP.PortalID AND P_AdditionalName.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue CapacityRating FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'CapacityRating'        ) P_CapacityRating   ON P_CapacityRating.PortalID
+= UP.PortalID AND P_CapacityRating.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue InclinationRating FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'InclinationRating'        ) P_InclinationRating   ON
+P_InclinationRating.PortalID   = UP.PortalID AND P_InclinationRating.UserID
+= U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Stage FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Stage'        ) P_Stage   ON P_Stage.PortalID   = UP.PortalID AND
+P_Stage.UserID   = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue ProspectResearch FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'ProspectResearch'        ) P_ProspectResearch   ON
+P_ProspectResearch.PortalID   = UP.PortalID AND P_ProspectResearch.UserID
+= U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue ProspectManager FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'ProspectManager'        ) P_ProspectManager   ON
+P_ProspectManager.PortalID   = UP.PortalID AND P_ProspectManager.UserID   =
+U.UserID
+    LEFT  JOIN (SELECT PortalID, UserID, PropertyValue altstate FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'AltState'        ) P_ProspectState   ON P_ProspectState.PortalID   =
+UP.PortalID AND P_ProspectState.UserID   = U.UserID
+WHERE 1=1 and U.IsDeleted = 0
+AND
+		(	
+			(
+				len(@searchField)=0  
+				
+				OR
+				( 
+					@searchField = 'firstname' AND firstname like @searchCriteria +'%'
+				)
+				OR
+				( 
+					@searchField = 'lastname' AND lastname like @searchCriteria +'%'
+				)
+				OR
+				(	 
+					@searchField = 'company' AND company like @searchCriteria +'%'
+				)
+				OR
+				( 
+					@searchField = 'city' AND  city like @searchCriteria +'%'
+				)
+				OR
+				( 
+					@searchField = 'state' AND  region like @searchCriteria +'%'
+				)
+				OR
+				( 
+					@searchField = 'ProspectManager' AND  ProspectManager like @searchCriteria +'%'
+				)
+			)
+		)
+	order by 
+		CASE WHEN @orderByField		= 'LastName' AND @OrderByDirection = 'ASC' THEN lastname END ASC,
+		CASE WHEN @orderByField		= 'LastName' AND @OrderByDirection = 'DESC' THEN lastname END desc, 
+		CASE WHEN @orderByField	    = 'FirstName' AND @OrderByDirection = 'ASC' THEN firstname END ASC,
+		CASE WHEN @orderByField		= 'FirstName' AND @OrderByDirection = 'DESC' THEN firstname END desc ,
+    	CASE WHEN @orderByField		= 'Company' AND @OrderByDirection = 'ASC' THEN company END ASC,
+		CASE WHEN @orderByField		= 'Company' AND @OrderByDirection = 'DESC' THEN company END desc, 
+		
+		CASE WHEN @orderByField		= 'City' AND @OrderByDirection = 'ASC' THEN city END ASC,
+		CASE WHEN @orderByField		= 'City' AND @OrderByDirection = 'DESC' THEN city END desc ,
+		
+		CASE WHEN @orderByField		= 'State' AND @OrderByDirection = 'ASC' THEN region END ASC,
+		CASE WHEN @orderByField		= 'State' AND @OrderByDirection = 'DESC' THEN region END desc ,
+				
+		CASE WHEN len(@orderByField)=0 THEN u.userid END ASC;
+
+	
+	declare @rCount int
+	select @rCount=count(*)  from @tempTable	
+		
+	declare @numberOfPages int
+	
+	if(@PageSize = -1)
+	begin
+		set @numberOfPages = 1;
+	end
+	else
+	begin
+		set @numberOfPages =@rCount/ @PageSize
+		if(@rCount % @PageSize>0)
+		begin
+			set @numberOfPages=@numberOfPages + 1
+		end
+	end	
+	
+	
+		
+select  *,
+	@rCount as [totalrecords]
+		,@PageSize as [RecordsperPage]
+		,
+		case @PageSize
+		when -1 then 1
+		else @numberOfPages
+		end  as [NumberOfPages]
+		,
+		case @PageSize 
+		when -1 then 1--'Page 1 of 1'
+		else @CurrentPage--'Page ' + cast(@CurrentPage as varchar(15)) + ' of ' + cast(@numberOfPages as varchar(15))
+		end   as [CurrentPage]	 
+		
+		from @tempTable where 1=1   
+	and rowid > @firstrec AND rowid < @lastrec ;
+	
+
+
+end		
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUserSearchRecordCount]    Script Date: 10/28/2015 09:41:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerUserSearchRecordCount](
+@PortalID int,	@PageIndex int,	@PageSize INT, @searchField varchar(100),
+@searchCriteria varchar(100),@orderByField varchar(100),@OrderByDirection varchar(4))
+as begin
+-- Set the page bounds
+--set @PageIndex=2
+--set @PageSize=10
+DECLARE @PageLowerBound INT,@PageUpperBound INT,@RowsToReturn int, @TotalRecords int
+EXEC dbo.CalculatePagingInformation @PageIndex, @PageSize, @RowsToReturn output, @PageLowerBound output, @PageUpperBound output
+--set @searchField		= N''
+--set @searchCriteria		= N''
+--set @orderByField		= N''
+--set @OrderByDirection	= N''
+;
+--WITH [tmpUsers] AS 
+--(
+--	select  ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS rowid,
+--		* 
+--	from GIBS_DonationTrackerUserFullList
+--	where (1=1) 
+
+--	AND
+--		( 
+--			( 
+--				@searchField = 'firstname' AND  firstname like @searchCriteria +'%'
+--			)
+--			OR
+--			( 
+--				@searchField = 'lastname' AND  lastname like @searchCriteria +'%'
+--			)
+--			OR
+--			(	 
+--				@searchField = 'company' AND  company like @searchCriteria +'%'
+--			)
+--			OR
+--			( 
+--				@searchField = 'city' AND  city like @searchCriteria +'%'
+--			)
+--			OR
+--			( 
+--				@searchField = 'state' AND  state like @searchCriteria +'%'
+--			)
+--		)
+
+		
+--)
+--select *  from [tmpusers] where  rowid > @PageLowerBound AND rowid < @PageUpperBound
+
+
+--	order by
+--		CASE WHEN @orderByField		= 'lastname' AND @OrderByDirection = 'ASC' THEN lastname END ASC,
+--		CASE WHEN @orderByField		= 'lastname' AND @OrderByDirection = 'DESC' THEN lastname END desc, 
+		
+--		CASE WHEN @orderByField		= 'firstname' AND @OrderByDirection = 'ASC' THEN firstname END ASC,
+--		CASE WHEN @orderByField		= 'firstname' AND @OrderByDirection = 'DESC' THEN firstname END desc ,
+    
+--		CASE WHEN @orderByField		= 'company' AND @OrderByDirection = 'ASC' THEN company END ASC,
+--		CASE WHEN @orderByField		= 'company' AND @OrderByDirection = 'DESC' THEN company END desc, 
+		
+--		CASE WHEN @orderByField		= 'city' AND @OrderByDirection = 'ASC' THEN city END ASC,
+--		CASE WHEN @orderByField		= 'city' AND @OrderByDirection = 'DESC' THEN city END desc ,
+		
+--		CASE WHEN @orderByField		= 'state' AND @OrderByDirection = 'ASC' THEN state END ASC,
+--		CASE WHEN @orderByField		= 'state' AND @OrderByDirection = 'DESC' THEN state END desc ;
+
+		
+----	set @TotalRecords =   select count(*)  from [tmpusers];
+
+
+
+
+WITH [tmpUsersCount] AS 
+(
+	select  ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS rowid,
+		* 
+	from GIBS_DonationTrackerUserFullList
+	where (1=1) 
+
+	AND
+		( 
+			( 
+				@searchField = 'firstname' AND  firstname like @searchCriteria +'%'
+			)
+			OR
+			( 
+				@searchField = 'lastname' AND  lastname like @searchCriteria +'%'
+			)
+			OR
+			(	 
+				@searchField = 'company' AND  company like @searchCriteria +'%'
+			)
+			OR
+			( 
+				@searchField = 'city' AND  city like @searchCriteria +'%'
+			)
+			OR
+			( 
+				@searchField = 'state' AND  state like @searchCriteria +'%'
+			)
+		)
+
+		
+)
+select count(*) as TotalRecords  from [tmpUsersCount] ;
+
+		
+
+
+
+
+
+
+
+
+end
+
+
+GO
+
+

@@ -1,0 +1,56 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+
+
+
+
+/** Drop Existing Stored Procedures **/
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_UpdateDonationTrackerDrive]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_UpdateDonationTrackerDrive
+GO
+
+
+
+
+
+/** Create Stored Procedures **/
+
+Create procedure {databaseOwner}{objectQualifier}GIBS_UpdateDonationTrackerDrive
+
+	@ModuleId       int,
+	@DriveID         int,
+	@DriveName  ntext,
+	@DriveDate	datetime,
+	@Description		ntext,
+	@IsActive 	bit
+
+as
+
+update {objectQualifier}GIBS_DonationTrackerDrives
+set    
+		DriveName = @DriveName,
+		DriveDate = @DriveDate,
+		[Description] = @Description,
+		IsActive = @IsActive
+		
+where  ModuleId = @ModuleId
+and    DriveID = @DriveID
+
+
+
+
+GO
+
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/

@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{005860CE-9194-4B08-8FB8-107B12D3EF53}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GIBS.Modules.DonationTracker</RootNamespace>
+    <AssemblyName>GIBS.Modules.DonationTracker</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClientDependency.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\ClientDependency.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetNuke, Version=9.2.2.178, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\DotNetNuke.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetNuke.Web, Version=9.2.2.178, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\DotNetNuke.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetNuke.Web.Client, Version=9.2.2.178, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\DotNetNuke.Web.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetNuke.WebControls, Version=2.4.0.598, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\DotNetNuke.WebControls.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetNuke.WebUtility, Version=4.2.1.783, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\DotNetNuke.WebUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.Data, Version=2.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Components\DataProvider.cs" />
+    <Compile Include="Components\DonationTrackerController.cs" />
+    <Compile Include="Components\DonationTrackerInfo.cs" />
+    <Compile Include="Components\DonationTrackerSettings.cs" />
+    <Compile Include="Components\GridViewExportUtil.cs" />
+    <Compile Include="Components\GridViewGroup.cs" />
+    <Compile Include="Components\GridViewGroupList.cs" />
+    <Compile Include="Components\GridViewHelper.cs" />
+    <Compile Include="Components\GridViewSummary.cs" />
+    <Compile Include="Components\GridViewSummaryList.cs" />
+    <Compile Include="Components\GridViewTools.cs" />
+    <Compile Include="Components\ReportServerCredentials.cs" />
+    <Compile Include="Components\SqlDataProvider.cs" />
+    <Compile Include="Components\StringHelper.cs" />
+    <Compile Include="DonationMerge.ascx.cs">
+      <DependentUpon>DonationMerge.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DonationMerge.ascx.designer.cs">
+      <DependentUpon>DonationMerge.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="EditDonationTracker.ascx.cs">
+      <DependentUpon>EditDonationTracker.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditDonationTracker.ascx.designer.cs">
+      <DependentUpon>EditDonationTracker.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ListDrives.ascx.cs">
+      <DependentUpon>ListDrives.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ListDrives.ascx.designer.cs">
+      <DependentUpon>ListDrives.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ListLetters.ascx.cs">
+      <DependentUpon>ListLetters.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ListLetters.ascx.designer.cs">
+      <DependentUpon>ListLetters.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportSearch.ascx.cs">
+      <DependentUpon>ReportSearch.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportSearch.ascx.designer.cs">
+      <DependentUpon>ReportSearch.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportSummary.ascx.cs">
+      <DependentUpon>ReportSummary.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportSummary.ascx.designer.cs">
+      <DependentUpon>ReportSummary.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.ascx.cs">
+      <DependentUpon>Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Settings.ascx.designer.cs">
+      <DependentUpon>Settings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ThankYouLetter.ascx.cs">
+      <DependentUpon>ThankYouLetter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ThankYouLetter.ascx.designer.cs">
+      <DependentUpon>ThankYouLetter.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewDonationTracker.ascx.cs">
+      <DependentUpon>ViewDonationTracker.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewDonationTracker.ascx.designer.cs">
+      <DependentUpon>ViewDonationTracker.ascx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Documentation\Documentation.css" />
+    <Content Include="Documentation\Documentation.html" />
+    <Content Include="Documentation\logo.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DonationTracker.dnn" />
+    <None Include="packages.config" />
+    <None Include="SqlScripts\01.00.00.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.02.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.03.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.11.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.12.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.13.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.14.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.15.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.18.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.19.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.23.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.25.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.26.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.27.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.29.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.30.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.31.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.33.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.34.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.35.SqlDataProvider" />
+    <Content Include="SqlScripts\01.00.52.SqlDataProvider" />
+    <None Include="SqlScripts\01.00.37.SqlDataProvider" />
+    <None Include="Uninstall.SqlDataProvider" />
+    <Content Include="DonationMerge.ascx" />
+    <Content Include="images\icon_pledge.png" />
+    <Content Include="images\no.png" />
+    <Content Include="images\search.png" />
+    <Content Include="images\yes.png" />
+    <Content Include="ListLetters.ascx" />
+    <Content Include="web.config" />
+    <None Include="web.config.del" />
+    <None Include="web.config.old">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="web.config.Debug.old">
+      <DependentUpon>web.config.old</DependentUpon>
+    </None>
+    <None Include="web.config.Release.old">
+      <DependentUpon>web.config.old</DependentUpon>
+    </None>
+    <None Include="web.config.Debug.del">
+      <DependentUpon>web.config.del</DependentUpon>
+    </None>
+    <None Include="web.config.Release.del">
+      <DependentUpon>web.config.del</DependentUpon>
+    </None>
+    <Content Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </Content>
+    <Content Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\Settings.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\ViewDonationTracker.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="EditDonationTracker.ascx" />
+    <Content Include="images\icon_money.png" />
+    <Content Include="JavaScript\jquery.maskedinput-1.3.js" />
+    <Content Include="JavaScript\jquery.watermarkinput.js" />
+    <Content Include="ListDrives.ascx" />
+    <Content Include="ReportSearch.ascx" />
+    <Content Include="ReportSummary.ascx" />
+    <Content Include="Settings.ascx" />
+    <Content Include="ThankYouLetter.ascx" />
+    <Content Include="ViewDonationTracker.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\EditDonationTracker.ascx.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\ListDrives.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\ReportSummary.ascx.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\ReportSearch.ascx.resx" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1193</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://dnn7.com/DesktopModules/GIBS/DonationTracker</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <Extension>zip</Extension>
+    <DNNFileName>DonationTracker</DNNFileName>
+    <PackageName>DonationTracker</PackageName>
+    <MSBuildCommunityTasksPath>$(SolutionDir)\packages\MSBuildTasks.1.5.0.235\tools</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  <Import Project="BuildScripts\ModulePackage.Targets" />
+  <Target Name="AfterBuild" DependsOnTargets="PackageModule">
+  </Target>
+  <Import Project="packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
+  </Target>
+</Project>

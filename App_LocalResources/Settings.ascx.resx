@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="lblNumPerPage.Text" xml:space="preserve">
+    <value>Number Per Page</value>
+  </data>
+  <data name="lblNumPerPage.Help" xml:space="preserve">
+    <value>Allows you to provide a custom template for displaying the items. Use parameters for dynamic substitution ( ie. [CONTENT] [CREATEDDATE] [CREATEDBYUSER] [CREATEDBYUSERNAME] )</value>
+  </data>
+  <data name="ControlTitle_settings.Text" xml:space="preserve">
+    <value>DonationTracker Settings</value>
+  </data>
+  <data name="ModuleHelp.Text" xml:space="preserve">
+    <value>About DonationTracker Settings</value>
+  </data>
+  <data name="lblAddUserRole.Help" xml:space="preserve">
+    <value>Allows you to add a custom role to the user account being created</value>
+  </data>
+  <data name="lblAddUserRole.Text" xml:space="preserve">
+    <value>Role to Add</value>
+  </data>
+  <data name="lblEmailBCC.Text" xml:space="preserve">
+    <value>E-Mail BCC</value>
+  </data>
+  <data name="lblEmailFrom.Text" xml:space="preserve">
+    <value>E-Mail From Address</value>
+  </data>
+  <data name="lblEmailMessage.Text" xml:space="preserve">
+    <value>E-Mail Message</value>
+  </data>
+  <data name="lblEmailSubject.Text" xml:space="preserve">
+    <value>E-Mail Subject</value>
+  </data>
+  <data name="lblEmailNewUserCredentials.Text" xml:space="preserve">
+    <value>Auto Email New User Credentials</value>
+  </data>
+  <data name="lblReportsUserRole.Help" xml:space="preserve">
+    <value>Select the role that can view Reports page</value>
+  </data>
+  <data name="lblReportsUserRole.Text" xml:space="preserve">
+    <value>View Report</value>
+  </data>
+  <data name="lblShowSendPassword.Text" xml:space="preserve">
+    <value>Show Send Password Button</value>
+  </data>
+  <data name="lblShowDonationHistory.Text" xml:space="preserve">
+    <value>Show Donation History</value>
+  </data>
+  <data name="lblEnableAddNewDonor.Text" xml:space="preserve">
+    <value>Enable Add New Donor</value>
+  </data>
+  <data name="lblReportPath.Text" xml:space="preserve">
+    <value>Report Path</value>
+  </data>
+  <data name="lblRSCredentialsDomain.Text" xml:space="preserve">
+    <value>Report Server Credentials Domain</value>
+  </data>
+  <data name="lblRSCredentialsPassword.Text" xml:space="preserve">
+    <value>Report Server Credentials Password</value>
+  </data>
+  <data name="lblRSCredentialsUserName.Text" xml:space="preserve">
+    <value>Report Server Credentials UserName</value>
+  </data>
+  <data name="lblurlReportServer.Text" xml:space="preserve">
+    <value>Report Server URL</value>
+  </data>
+  <data name="lblMergeUserRole.Text" xml:space="preserve">
+    <value>Merge Role</value>
+  </data>
+  <data name="lblProfileCheckAdditionalFirstName.Text" xml:space="preserve">
+    <value>ProfileCheck - "AdditionalFirstName"</value>
+  </data>
+  <data name="lblProfileCheckAdditionalMI.Text" xml:space="preserve">
+    <value>ProfileCheck - "AdditionalMI"</value>
+  </data>
+  <data name="lblProfileCheckAdditionalName.Text" xml:space="preserve">
+    <value>ProfileCheck - "AdditionalName"</value>
+  </data>
+  <data name="lblProfileCheckAge.Text" xml:space="preserve">
+    <value>ProfileCheck - "Age"</value>
+  </data>
+  <data name="lblProfileCheckAltCity.Text" xml:space="preserve">
+    <value>ProfileCheck - "AltCity"</value>
+  </data>
+  <data name="lblProfileCheckAltPostalCode.Text" xml:space="preserve">
+    <value>ProfileCheck - "AltPostalCode"</value>
+  </data>
+  <data name="lblProfileCheckAltState.Text" xml:space="preserve">
+    <value>ProfileCheck - "AltState"</value>
+  </data>
+  <data name="lblProfileCheckAltStreet.Text" xml:space="preserve">
+    <value>ProfileCheck - "AltStreet"</value>
+  </data>
+  <data name="lblProfileCheckAnonymous.Text" xml:space="preserve">
+    <value>ProfileCheck - "Anonymous"</value>
+  </data>
+  <data name="lblProfileCheckCapacityRating.Text" xml:space="preserve">
+    <value>ProfileCheck - "CapacityRating"</value>
+  </data>
+  <data name="lblProfileCheckComments.Text" xml:space="preserve">
+    <value>ProfileCheck - "Comments"</value>
+  </data>
+  <data name="lblProfileCheckCompany.Text" xml:space="preserve">
+    <value>ProfileCheck - "Company"</value>
+  </data>
+  <data name="lblProfileCheckDoNotMail.Text" xml:space="preserve">
+    <value>ProfileCheck - "Do Not Mail"</value>
+  </data>
+  <data name="lblProfileCheckInclinationRating.Text" xml:space="preserve">
+    <value>ProfileCheck - "InclinationRating"</value>
+  </data>
+  <data name="lblProfileCheckProspectManager.Text" xml:space="preserve">
+    <value>ProfileCheck - "ProspectManager"</value>
+  </data>
+  <data name="lblProfileCheckProspectResearch.Text" xml:space="preserve">
+    <value>ProfileCheck - "ProspectResearch"</value>
+  </data>
+  <data name="lblProfileCheckStage.Text" xml:space="preserve">
+    <value>ProfileCheck - "Stage"</value>
+  </data>
+  <data name="lblProfileCheckStreet2.Text" xml:space="preserve">
+    <value>ProfileCheck - "Street2"</value>
+  </data>
+  <data name="lblProfileCheckWorkPhone.Text" xml:space="preserve">
+    <value>ProfileCheck - "WorkPhone"</value>
+  </data>
+</root>

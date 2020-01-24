@@ -1,0 +1,821 @@
+﻿
+
+IF COL_LENGTH('GIBS_DonationTracker','Source') IS NULL
+ BEGIN
+  /*COLUMN DOES NOT EXIST OR CALLER DOES NOT HAVE PERMISSION TO VIEW THE OBJECT*/
+  ALTER TABLE [dbo].[GIBS_DonationTracker] 
+ADD [Source] nvarchar(50) NULL
+
+ END
+
+ GO
+
+ -- TypeOfDonation
+
+ IF COL_LENGTH('GIBS_DonationTrackerPledge','Source') IS NULL
+ BEGIN
+  /*COLUMN DOES NOT EXIST OR CALLER DOES NOT HAVE PERMISSION TO VIEW THE OBJECT*/
+  ALTER TABLE [dbo].[GIBS_DonationTrackerPledge] 
+ADD [Source] nvarchar(50) NULL
+
+ END
+
+ GO
+
+
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerAddDonation]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerAddDonation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerAddDonation]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerAddDrive]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerAddDrive]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerAddDrive]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerDeleteDonation]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerDeleteDonation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerDeleteDonation]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDonation]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerGetDonation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerGetDonation]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDrive]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerGetDrive]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerGetDrive]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDrives]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerGetDrives]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerGetDrives]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetUserDonations]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerGetUserDonations]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerGetUserDonations]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByPledgeID_ReportMerge]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByPledgeID_ReportMerge]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByPledgeID_ReportMerge]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID_ReportMerge]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID_ReportMerge]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID_ReportMerge]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledgeAdd]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerPledgeAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerPledgeAdd]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledgeGetPledgeByID]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerPledgeGetPledgeByID]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerPledgeGetPledgeByID]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledgeGetPledgesByUserID]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerPledgeGetPledgesByUserID]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerPledgeGetPledgesByUserID]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledgeUpdate]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerPledgeUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerPledgeUpdate]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUpdateDonation]    Script Date: 04/19/2016 13:57:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerUpdateDonation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerUpdateDonation]
+GO
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerAddDonation]    Script Date: 04/19/2016 13:57:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE procedure [dbo].[GIBS_DonationTrackerAddDonation]
+
+	@ModuleId       int,
+	@DonationUserID         int,
+	@DriveID         int,
+	@DonationDate	datetime,
+	@DonationAmount money,
+	@DonationType varchar(100),
+	@Followup 	bit,
+	@DonationNotes		ntext,
+	@UserId	int,
+	@PledgeID int,
+	@PledgeDate	datetime,
+	@DonationFrom varchar(200),
+	@TypeOfDonation varchar(50),
+	@Source varchar(50)
+	
+
+as
+
+insert into GIBS_DonationTracker (
+	ModuleID, 
+	UserID, 
+	DriveID, 
+	DonationDate, 
+	DonationAmount, 
+	DonationType, 
+	Followup, 
+	Notes, 
+	CreatedByUser, 
+	CreatedDate,
+	PledgeID,
+	PledgeDate,
+	DonationFrom,
+	TypeOfDonation,
+	Source
+) 
+values (
+	@ModuleId,
+	@DonationUserID,
+	@DriveID,
+	@DonationDate,
+	@DonationAmount,
+	@DonationType,
+	@Followup,
+	@DonationNotes,
+	@UserId,
+	getdate(),
+	@PledgeID,
+	CASE WHEN @PledgeDate = '1900-01-01' THEN Null ELSE @PledgeDate END,
+	@DonationFrom,
+	@TypeOfDonation,
+	@Source
+	
+)
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerAddDrive]    Script Date: 04/19/2016 13:57:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE procedure [dbo].[GIBS_DonationTrackerAddDrive]
+
+	@ModuleId       int,
+	@DriveName	varchar(500),
+	@DriveDate datetime,
+	@Description        ntext,
+	@isActive	bit,
+	@UserID         int,
+	@Reminder ntext
+
+as
+
+insert into GIBS_DonationTrackerDrives (
+	ModuleId,
+	DriveName,
+	DriveDate,
+	[Description],
+	isActive,
+	CreatedByUser,
+	CreatedDate,
+	Reminder
+) 
+values (
+	@ModuleId,
+	@DriveName,
+	@DriveDate,
+	@Description,
+	@isActive,
+	@UserID,
+	getdate(),
+	@Reminder
+)
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerDeleteDonation]    Script Date: 04/19/2016 13:57:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+create procedure [dbo].[GIBS_DonationTrackerDeleteDonation]
+
+	@ModuleId       int,
+    @DonationID         int
+
+as
+
+delete
+from   GIBS_DonationTracker
+where  ModuleId = @ModuleId
+and    DonationID = @DonationID
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDonation]    Script Date: 04/19/2016 13:57:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE procedure [dbo].[GIBS_DonationTrackerGetDonation]
+
+	@ModuleId int,
+    @DonationID int
+
+as
+
+SELECT     GIBS_DonationTracker.ModuleID, GIBS_DonationTracker.DonationID, GIBS_DonationTracker.UserID AS DonationUserID, GIBS_DonationTracker.DriveID, 
+                      GIBS_DonationTracker.DonationDate, GIBS_DonationTracker.DonationAmount, GIBS_DonationTracker.DonationType, GIBS_DonationTracker.Followup, 
+                      GIBS_DonationTracker.Notes as DonationNotes, GIBS_DonationTracker.CreatedByUser, GIBS_DonationTracker.CreatedDate, 
+					  GIBS_DonationTrackerDrives.DriveName, GIBS_DonationTrackerDrives.[Description],
+                      'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName,
+                      'DonationUserName' = DU.FirstName + ' ' + DU.LastName,
+					  DU.FirstName, DU.LastName
+					  ,PledgeID
+					  , GIBS_DonationTracker.PledgeDate,
+
+					  DonationFrom, TypeOfDonation, Source
+
+FROM         GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTracker.CreatedByUser = CU.UserID                       
+                      
+                      
+                      
+                      INNER JOIN
+                      GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId) 
+AND (GIBS_DonationTracker.DonationID = @DonationID)
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDrive]    Script Date: 04/19/2016 13:57:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE procedure [dbo].[GIBS_DonationTrackerGetDrive]
+
+	@ModuleId int,
+    @DriveID int
+
+as
+
+select ModuleId,
+       DriveID,
+	   DriveName,
+	   DriveDate,
+       [Description],
+       CreatedByUser,
+       CreatedDate,
+	   isActive,
+       'CreatedByUserName' = Users.FirstName + ' ' + Users.LastName,
+       Reminder
+from GIBS_DonationTrackerDrives
+left outer join Users on GIBS_DonationTrackerDrives.CreatedByUser = Users.UserId
+where  ModuleId = @ModuleId
+and DriveID = @DriveID
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetDrives]    Script Date: 04/19/2016 13:57:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/************************************************************/
+/*****              DRIVES                     *****/
+/************************************************************/
+
+CREATE procedure [dbo].[GIBS_DonationTrackerGetDrives]
+
+	@ModuleId int,
+	@isActive int
+
+as
+
+select ModuleId,
+       DriveID,
+       DriveName,
+	   DriveDate,
+	   [Description],
+       CreatedByUser,
+       CreatedDate,
+	   isActive,
+       'CreatedByUserName' = Users.FirstName + ' ' + Users.LastName,
+       Reminder
+from GIBS_DonationTrackerDrives
+left outer join Users on GIBS_DonationTrackerDrives.CreatedByUser = Users.UserId
+where  ModuleId = @ModuleId AND (isActive = 1 or isActive = @isActive)
+order by  CAST([DriveName] AS VARCHAR(500))
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerGetUserDonations]    Script Date: 04/19/2016 13:57:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/** Create Stored Procedures **/
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerGetUserDonations]
+
+	@ModuleId int,
+	@DonationUserID int
+
+as
+
+SELECT     GIBS_DonationTracker.ModuleID, GIBS_DonationTracker.DonationID, GIBS_DonationTracker.UserID, GIBS_DonationTracker.DriveID, 
+                      GIBS_DonationTracker.DonationDate, GIBS_DonationTracker.DonationAmount, GIBS_DonationTracker.DonationType, GIBS_DonationTracker.Followup, 
+                      GIBS_DonationTracker.Notes as DonationNotes, GIBS_DonationTracker.CreatedByUser, GIBS_DonationTracker.CreatedDate, GIBS_DonationTrackerDrives.DriveName,
+                      'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName,
+                      'DonationUserName' = DU.FirstName + ' ' + DU.LastName,
+					  GIBS_DonationTracker.PledgeDate, GIBS_DonationTracker.PledgeID,
+					  		DonationFrom, TypeOfDonation , Source
+
+FROM         GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTracker.CreatedByUser = CU.UserID                       
+                      
+                      
+                      
+                      INNER JOIN
+                      GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId) 
+AND (GIBS_DonationTracker.UserID = @DonationUserID) 
+ORDER BY DonationDate DESC
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByPledgeID_ReportMerge]    Script Date: 04/19/2016 13:57:15 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/** Create Stored Procedures **/
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByPledgeID_ReportMerge]
+
+--	@ModuleId int,
+	@PledgeID int
+
+
+as
+
+Declare @StartDate Date;
+Declare @EndDate Date;
+Declare @Frequency  varchar(8);
+Declare @UserID int = null;
+Declare @DriveID int;
+Declare @PledgeAmount money;
+
+--select top 1 PledgeID, StartDate, EndDate, Frequency,  PledgeAmount from GIBS_DonationTrackerPledge  
+--where UserID = @DonationUserID
+
+
+
+select   @UserID = UserID, @StartDate = StartDate, @EndDate = EndDate, @Frequency = Frequency, @PledgeID = PledgeID, @DriveID = DriveID,
+ @PledgeAmount = PledgeAmount from GIBS_DonationTrackerPledge 
+WHERE PledgeID = @PledgeID 
+Order by PledgeID desc;
+
+
+if @PledgeID is null
+	--there is no record
+	SET @Frequency = '';
+Else
+	--there is an PledgeID so I can use that value to query the table
+	BEGIN
+	--	SELECT  ItemID = ROW_NUMBER() OVER (ORDER BY a.PledgeDate asc), a.PledgeID, a.PledgeDate, 
+		SELECT   a.PledgeID, a.PledgeDate, 
+		DonationDate, COALESCE(DonationAmount,0) AS  DonationAmount,
+		DriveID = @DriveID,
+		PledgeAmount = @PledgeAmount,
+		UserID = @UserID,
+		Frequency = @Frequency
+		--DriveName = (SELECT [DriveName] FROM [dbo].[GIBS_DonationTrackerDrives] where [DriveID] = @DriveID) 
+		FROM [GIBS_DonationTracker_GetDateRange]( @Frequency, @StartDate, @EndDate, @PledgeID) as a
+		
+ LEFT JOIN GIBS_DonationTracker as b on a.PledgeDate = b.PledgeDate AND a.PledgeID = b.PledgeID 
+
+ WHERE DonationDate IS NULL
+
+	END
+
+
+
+
+
+
+
+
+
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID]    Script Date: 04/19/2016 13:57:15 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/** Create Stored Procedures **/
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID]
+
+--	@ModuleId int,
+	@DonationUserID int
+
+
+as
+
+Declare @StartDate Date;
+Declare @EndDate Date;
+Declare @Frequency  varchar(8);
+Declare @PledgeID int = null;
+Declare @DriveID int;
+
+--select top 1 PledgeID, StartDate, EndDate, Frequency,  PledgeAmount from GIBS_DonationTrackerPledge  
+--where UserID = @DonationUserID
+
+
+
+select top 1   @StartDate = StartDate, @EndDate = EndDate, @Frequency = Frequency, @PledgeID = PledgeID, @DriveID = DriveID from GIBS_DonationTrackerPledge 
+WHERE UserID = @DonationUserID 
+Order by PledgeID desc;
+
+
+if @PledgeID is null
+	--there is no record
+	SET @Frequency = '';
+Else
+	--there is an orderID so I can use that value to query ORDERS table
+	BEGIN
+		SELECT  ItemID = ROW_NUMBER() OVER (ORDER BY a.PledgeDate asc), a.PledgeID, a.PledgeDate, 
+		DonationDate, COALESCE(DonationAmount,0) AS  DonationAmount,
+		DriveName = (SELECT [DriveName] FROM [dbo].[GIBS_DonationTrackerDrives] where [DriveID] = @DriveID) FROM [GIBS_DonationTracker_GetDateRange]( @Frequency, @StartDate, @EndDate, @PledgeID) as a
+ LEFT JOIN GIBS_DonationTracker as b on a.PledgeDate = b.PledgeDate AND a.PledgeID = b.PledgeID 
+	END
+
+
+
+
+
+
+
+
+
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID_ReportMerge]    Script Date: 04/19/2016 13:57:15 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/** Create Stored Procedures **/
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerPledge_GetPledgeScheduleByUserID_ReportMerge]
+
+--	@ModuleId int,
+	@DonationUserID int
+
+
+as
+
+Declare @StartDate Date;
+Declare @EndDate Date;
+Declare @Frequency  varchar(8);
+Declare @PledgeID int = null;
+Declare @DriveID int;
+Declare @PledgeAmount money;
+
+--select top 1 PledgeID, StartDate, EndDate, Frequency,  PledgeAmount from GIBS_DonationTrackerPledge  
+--where UserID = @DonationUserID
+
+
+
+select    @StartDate = StartDate, @EndDate = EndDate, @Frequency = Frequency, @PledgeID = PledgeID, @DriveID = DriveID, @PledgeAmount = PledgeAmount from GIBS_DonationTrackerPledge 
+WHERE UserID = @DonationUserID 
+Order by PledgeID desc;
+
+
+if @PledgeID is null
+	--there is no record
+	SET @Frequency = '';
+Else
+	--there is an PledgeID so I can use that value to query the table
+	BEGIN
+	--	SELECT  ItemID = ROW_NUMBER() OVER (ORDER BY a.PledgeDate asc), a.PledgeID, a.PledgeDate, 
+		SELECT   a.PledgeID, a.PledgeDate, 
+		DonationDate, COALESCE(DonationAmount,0) AS  DonationAmount,
+		DriveID = @DriveID,
+		PledgeAmount = @PledgeAmount,
+		UserID = @DonationUserID
+		--DriveName = (SELECT [DriveName] FROM [dbo].[GIBS_DonationTrackerDrives] where [DriveID] = @DriveID) 
+		FROM [GIBS_DonationTracker_GetDateRange]( @Frequency, @StartDate, @EndDate, @PledgeID) as a
+		
+ LEFT JOIN GIBS_DonationTracker as b on a.PledgeDate = b.PledgeDate AND a.PledgeID = b.PledgeID 
+
+ WHERE DonationDate IS NULL
+
+	END
+
+
+
+
+
+
+
+
+
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledgeAdd]    Script Date: 04/19/2016 13:57:15 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerPledgeAdd]
+
+	@ModuleId       int,
+	@DonationUserID         int,
+	@DriveID         int,
+	@StartDate	datetime,
+	@EndDate	datetime,
+	@PledgeAmount money,
+	@Frequency varchar(8),
+	@Followup 	bit,
+	@Notes		ntext,
+	@UserId	int,
+	@NumberOfPayments int,
+	@DonationFrom varchar(200),
+	@TypeOfDonation varchar(50),
+	@Source varchar(50)
+	
+	
+
+as
+
+insert into GIBS_DonationTrackerPledge 
+           ([ModuleID]
+           ,[UserID]
+           ,[DriveID]
+           ,[StartDate]
+           ,[EndDate]
+           ,[PledgeAmount]
+           ,[Frequency]
+           ,[Followup]
+           ,[Notes]
+           ,[CreatedByUserID]
+           ,[CreatedDate]
+           ,[UpdatedByUserID]
+           ,[UpdatedDate]
+		   ,[NumberOfPayments]
+		   ,
+	DonationFrom,
+	TypeOfDonation,
+	[Source]
+		   )
+values (
+	@ModuleId,
+	@DonationUserID,
+	@DriveID,
+	@StartDate,
+	@EndDate,
+	
+	@PledgeAmount,
+	@Frequency,
+	
+	@Followup,
+	@Notes,
+	@UserId,
+	getdate(),
+	@UserId,
+	getdate(),
+	@NumberOfPayments,
+		@DonationFrom,
+	@TypeOfDonation,
+	@Source
+)
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledgeGetPledgeByID]    Script Date: 04/19/2016 13:57:15 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerPledgeGetPledgeByID]
+
+
+    @PledgeID int
+
+as
+
+SELECT        GIBS_DonationTrackerPledge.DriveID, GIBS_DonationTrackerPledge.StartDate, GIBS_DonationTrackerPledge.EndDate, GIBS_DonationTrackerPledge.PledgeAmount, GIBS_DonationTrackerPledge.Frequency, 
+                         GIBS_DonationTrackerPledge.Followup, GIBS_DonationTrackerPledge.Notes, GIBS_DonationTrackerPledge.CreatedByUserID, GIBS_DonationTrackerPledge.CreatedDate, 
+                         GIBS_DonationTrackerPledge.UpdatedByUserID, GIBS_DonationTrackerPledge.UpdatedDate, GIBS_DonationTrackerDrives.DriveName, GIBS_DonationTrackerPledge.UserID
+						 ,'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName,
+                    'UpdatedByUserName' = UU.FirstName + ' ' + UU.LastName,
+					GIBS_DonationTrackerPledge.NumberOfPayments,
+						GIBS_DonationTrackerPledge.DonationFrom,
+	GIBS_DonationTrackerPledge.TypeOfDonation,
+	GIBS_DonationTrackerPledge.Source 
+FROM            GIBS_DonationTrackerPledge INNER JOIN
+                         GIBS_DonationTrackerDrives ON GIBS_DonationTrackerPledge.DriveID = GIBS_DonationTrackerDrives.DriveID
+
+
+left outer JOIN
+                      Users UU ON GIBS_DonationTrackerPledge.UpdatedByUserID = UU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTrackerPledge.CreatedByUserID = CU.UserID  
+
+where  GIBS_DonationTrackerPledge.PledgeID = @PledgeID
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledgeGetPledgesByUserID]    Script Date: 04/19/2016 13:57:15 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerPledgeGetPledgesByUserID]
+
+	@ModuleID int,
+    @DonationUserID int
+
+as
+
+SELECT      GIBS_DonationTrackerPledge.PledgeID, GIBS_DonationTrackerPledge.UserID, GIBS_DonationTrackerPledge.DriveID, GIBS_DonationTrackerPledge.StartDate, GIBS_DonationTrackerPledge.EndDate, GIBS_DonationTrackerPledge.PledgeAmount, GIBS_DonationTrackerPledge.Frequency, 
+                         GIBS_DonationTrackerPledge.Followup, GIBS_DonationTrackerPledge.Notes, GIBS_DonationTrackerPledge.CreatedByUserID, GIBS_DonationTrackerPledge.CreatedDate, 
+                         GIBS_DonationTrackerPledge.UpdatedByUserID, GIBS_DonationTrackerPledge.UpdatedDate, GIBS_DonationTrackerDrives.DriveName, GIBS_DonationTrackerPledge.UserID
+						 ,'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName,
+                    'UpdatedByUserName' = UU.FirstName + ' ' + UU.LastName,
+					GIBS_DonationTrackerPledge.NumberOfPayments,
+					GIBS_DonationTrackerPledge.DonationFrom,
+	GIBS_DonationTrackerPledge.TypeOfDonation, GIBS_DonationTrackerPledge.Source
+FROM            GIBS_DonationTrackerPledge INNER JOIN
+                         GIBS_DonationTrackerDrives ON GIBS_DonationTrackerPledge.DriveID = GIBS_DonationTrackerDrives.DriveID
+
+
+left outer JOIN
+                      Users UU ON GIBS_DonationTrackerPledge.UpdatedByUserID = UU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTrackerPledge.CreatedByUserID = CU.UserID  
+
+where (GIBS_DonationTrackerPledge.ModuleID = @ModuleID) AND (GIBS_DonationTrackerPledge.UserID = @DonationUserID)
+ ORDER BY PledgeID desc
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerPledgeUpdate]    Script Date: 04/19/2016 13:57:15 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE procedure [dbo].[GIBS_DonationTrackerPledgeUpdate]
+
+	
+	@PledgeID         int,
+	@DriveID         int,
+	@StartDate	datetime,
+	@EndDate	datetime,
+	@PledgeAmount money,
+	@Frequency varchar(8),
+	@Followup 	bit,
+	@Notes		ntext,
+	@UserId	int,
+	@NumberOfPayments int,
+			@DonationFrom varchar(200),
+	@TypeOfDonation varchar(50),
+	@Source varchar(50)
+	
+	
+
+as
+
+
+UPDATE [dbo].[GIBS_DonationTrackerPledge]
+   SET 
+      [DriveID] = @DriveID
+      ,[StartDate] = @StartDate
+      ,[EndDate] = @EndDate
+      ,[PledgeAmount] = @PledgeAmount
+      ,[Frequency] = @Frequency
+      ,[Followup] = @Followup
+      ,[Notes] = @Notes
+      ,[UpdatedByUserID] = @UserId
+      ,[UpdatedDate] = getdate()
+	  ,[NumberOfPayments] = @NumberOfPayments
+	  	  ,		DonationFrom = @DonationFrom,
+		TypeOfDonation = @TypeOfDonation,
+		[Source] = @Source
+ WHERE PledgeID = @PledgeID
+
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUpdateDonation]    Script Date: 04/19/2016 13:57:15 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE procedure [dbo].[GIBS_DonationTrackerUpdateDonation]
+
+	@ModuleId       int,
+	@DonationID         int,
+	@DriveID         int,
+	@DonationDate	datetime,
+	@DonationAmount money,
+	@DonationType varchar(100),
+	@Followup 	bit,
+	@DonationNotes		ntext,
+	@PledgeID int,
+	@PledgeDate	datetime,
+	@DonationFrom varchar(200),
+	@TypeOfDonation varchar(50),
+	@Source varchar(50)
+
+
+as
+
+update GIBS_DonationTracker
+set    DriveID       = @DriveID,
+		DonationDate = @DonationDate,
+		DonationAmount = @DonationAmount,
+		DonationType = @DonationType,
+		Followup = @Followup,
+		Notes = @DonationNotes,
+		PledgeID = @PledgeID,
+		PledgeDate = CASE WHEN @PledgeDate = '1900-01-01' THEN Null ELSE @PledgeDate END,
+		DonationFrom = @DonationFrom,
+		TypeOfDonation = @TypeOfDonation,
+		[Source] = @Source
+		
+where  ModuleId = @ModuleId
+and    DonationID = @DonationID
+GO
+
+

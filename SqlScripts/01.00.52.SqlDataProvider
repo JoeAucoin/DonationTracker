@@ -1,0 +1,367 @@
+﻿
+IF COL_LENGTH('GIBS_DonationTracker_Merged','PledgeDate') IS NULL
+ BEGIN
+  /*COLUMN DOES NOT EXIST OR CALLER DOES NOT HAVE PERMISSION TO VIEW THE OBJECT*/
+  ALTER TABLE [dbo].[GIBS_DonationTracker_Merged] 
+ADD [PledgeDate] date
+
+ END
+
+ GO
+
+
+
+IF COL_LENGTH('GIBS_DonationTracker_Merged','DonationFrom') IS NULL
+ BEGIN
+  /*COLUMN DOES NOT EXIST OR CALLER DOES NOT HAVE PERMISSION TO VIEW THE OBJECT*/
+  ALTER TABLE [dbo].[GIBS_DonationTracker_Merged] 
+ADD [DonationFrom] nvarchar(200) NULL
+
+ END
+
+ GO
+
+
+ -- TypeOfDonation
+
+ IF COL_LENGTH('GIBS_DonationTracker_Merged','TypeOfDonation') IS NULL
+ BEGIN
+  /*COLUMN DOES NOT EXIST OR CALLER DOES NOT HAVE PERMISSION TO VIEW THE OBJECT*/
+  ALTER TABLE [dbo].[GIBS_DonationTracker_Merged] 
+ADD [TypeOfDonation] nvarchar(50) NULL
+
+ END
+
+ GO
+
+
+IF COL_LENGTH('GIBS_DonationTracker_Merged','Source') IS NULL
+ BEGIN
+  /*COLUMN DOES NOT EXIST OR CALLER DOES NOT HAVE PERMISSION TO VIEW THE OBJECT*/
+  ALTER TABLE [dbo].[GIBS_DonationTracker_Merged] 
+ADD [Source] nvarchar(100) NULL
+
+ END
+
+ GO
+
+
+ 
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUserFullListSearch]    Script Date: 1/19/2020 9:31:50 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerUserFullListSearch]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerUserFullListSearch]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerUserFullListSearch]    Script Date: 1/19/2020 9:31:50 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerUserFullListSearch]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[GIBS_DonationTrackerUserFullListSearch] AS' 
+END
+GO
+
+
+ALTER procedure [dbo].[GIBS_DonationTrackerUserFullListSearch](
+@PortalID int,	@PageIndex int,	@PageSize INT, @searchField varchar(100),
+@searchCriteria varchar(100),@orderByField varchar(100),@OrderByDirection
+varchar(4))
+as begin
+
+declare @CurrentPage int
+--set @PageIndex=0
+--set @PageIndex=@PageIndex+1
+set @CurrentPage=@PageIndex
+--set @PageSize=10
+
+Declare @FirstRec int
+Declare @LastRec int
+if(@PageSize = -1)
+begin
+	Set @FirstRec = -1;
+	Set @LastRec = -1;
+end
+else
+begin
+	Set @FirstRec = (@CurrentPage - 1) * @PageSize
+	Set @LastRec = (@CurrentPage * @PageSize + 1) end
+--select @firstrec,@lastrec	
+	
+--set @searchField		= N'lastname'
+--set @searchCriteria		= N'r'
+--set @orderByField		= N'firstname'
+--set @OrderByDirection	= N'asc'
+
+
+
+
+declare @tempTable TABLE(rowid int not null identity(1,1),
+	PortalID int, userID int , UserName varchar(100), FirstName varchar(100), LastName varchar(100), Displayname varchar(100), Email varchar(100), 
+    Street varchar(100), City varchar(100) , [state] varchar(100), PostalCode varchar(100), 
+	-- Cell varchar(100), Telephone varchar(100),  AdditionalFirstName varchar(100), AdditionalName varchar(100), CapacityRating varchar(100), InclinationRating varchar(100), Stage varchar(100), ProspectResearch varchar(100),
+	Company varchar(100), ProspectManager varchar(100)
+	)
+insert into @tempTable
+SELECT   UP.PortalID, U.UserID, UserName, FirstName, LastName, Displayname,
+Email, 
+        Street, City , 
+		
+
+	
+ (SELECT [Value] FROM Lists where EntryID = (SELECT PropertyValue FROM UserProfile WHERE UserId = U.UserId AND PropertyDefinitionID = (SELECT PropertyDefinitionID FROM ProfilePropertyDefinition WHERE PropertyName = 'Region' AND PortalID = @PortalID)))
+
+ AS  [State] 
+
+		
+		, PostalCode
+	--	,   Cell, Telephone,   AdditionalFirstName, AdditionalName, CapacityRating, InclinationRating, Stage, ProspectResearch
+		, 	Company, ProspectManager
+ 		
+ FROM        [Users] U 
+  INNER JOIN [UserPortals] UP ON U.UserID = UP.UserID
+  -- access each Profile Property:
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Unit       FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Unit'           ) P_Unit      ON P_Unit.PortalID      = UP.PortalID AND
+P_Unit.UserID      = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Street     FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Street'         ) P_Street    ON P_Street.PortalID    = UP.PortalID AND
+P_Street.UserID    = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue City       FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'City'           ) P_City      ON P_City.PortalID      = UP.PortalID AND
+P_City.UserID      = U.UserID
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue PostalCode FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'PostalCode'     ) P_ZipCode   ON P_ZipCode.PortalID   = UP.PortalID AND
+P_ZipCode.UserID   = U.UserID
+	
+
+
+	
+	
+	
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Cell       FROM
+--[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'Cell'           ) P_Cell      ON P_Cell.PortalID      = UP.PortalID AND
+--P_Cell.UserID      = U.UserID
+
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Telephone  FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'Telephone'      ) P_Telephone ON P_Telephone.PortalID = UP.PortalID AND
+--P_Telephone.UserID = U.UserID
+
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Telefax    FROM
+--[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'Fax'
+--) P_Telefax   ON P_Telefax.PortalID   = UP.PortalID AND P_Telefax.UserID   =
+--U.UserID
+
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue IM         FROM
+--[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName = N'IM'
+--) P_IM        ON P_IM.PortalID        = UP.PortalID AND P_IM.UserID        =
+--U.UserID
+
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Website    FROM
+--[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'Website'        ) P_Website   ON P_Website.PortalID   = UP.PortalID AND
+--P_Website.UserID   = U.UserID
+
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue [Language] FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'PreferredLocale') P_Language  ON P_Language.PortalID  = UP.PortalID AND P_Language.UserID  = U.UserID
+
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Company    FROM
+[ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'Company'        ) P_Company   ON P_Company.PortalID   = UP.PortalID AND
+P_Company.UserID   = U.UserID
+
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue
+--AdditionalFirstName		FROM [ProfilePropertyDefinition] PD 
+
+--INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID
+--WHERE PropertyName = N'AdditionalFirstName') P_AdditionalFirstName   ON
+--P_AdditionalFirstName.PortalID   = UP.PortalID AND P_AdditionalFirstName.UserID   = U.UserID
+	
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue AdditionalName FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'AdditionalName'        ) P_AdditionalName   ON P_AdditionalName.PortalID
+--= UP.PortalID AND P_AdditionalName.UserID   = U.UserID
+	
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue CapacityRating FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'CapacityRating'        ) P_CapacityRating   ON P_CapacityRating.PortalID
+--= UP.PortalID AND P_CapacityRating.UserID   = U.UserID
+	
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue InclinationRating FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'InclinationRating'        ) P_InclinationRating   ON
+--P_InclinationRating.PortalID   = UP.PortalID AND P_InclinationRating.UserID
+--= U.UserID
+
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue Stage FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'Stage'        ) P_Stage   ON P_Stage.PortalID   = UP.PortalID AND
+--P_Stage.UserID   = U.UserID
+
+--	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue ProspectResearch FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'ProspectResearch'        ) P_ProspectResearch   ON
+--P_ProspectResearch.PortalID   = UP.PortalID AND P_ProspectResearch.UserID
+--= U.UserID
+
+	LEFT  JOIN (SELECT PortalID, UserID, PropertyValue ProspectManager FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+N'ProspectManager'        ) P_ProspectManager   ON
+P_ProspectManager.PortalID   = UP.PortalID AND P_ProspectManager.UserID   =
+U.UserID
+
+--    LEFT  JOIN (SELECT PortalID, UserID, PropertyValue altstate FROM [ProfilePropertyDefinition] PD INNER JOIN [UserProfile] P ON PD.PropertyDefinitionID = P.PropertyDefinitionID WHERE PropertyName =
+--N'AltState'        ) P_ProspectState   ON P_ProspectState.PortalID   =
+--UP.PortalID AND P_ProspectState.UserID   = U.UserID
+
+
+WHERE 1=1 and UP.IsDeleted = 0
+AND
+		(	
+			(
+				len(@searchField)=0  
+				
+				OR
+				( 
+					@searchField = 'firstname' AND firstname like @searchCriteria +'%'
+				)
+				OR
+				( 
+					@searchField = 'lastname' AND lastname like @searchCriteria +'%'
+				)
+				OR
+				(	 
+					@searchField = 'company' AND company like @searchCriteria +'%'
+				)
+				OR
+				( 
+					@searchField = 'city' AND  city like @searchCriteria +'%'
+				)
+
+				OR
+				( 
+					@searchField = 'ProspectManager' AND  ProspectManager like @searchCriteria +'%'
+				)
+			)
+		)
+	order by 
+		CASE WHEN @orderByField		= 'LastName' AND @OrderByDirection = 'ASC' THEN lastname END ASC,
+		CASE WHEN @orderByField		= 'LastName' AND @OrderByDirection = 'DESC' THEN lastname END desc, 
+		CASE WHEN @orderByField	    = 'FirstName' AND @OrderByDirection = 'ASC' THEN firstname END ASC,
+		CASE WHEN @orderByField		= 'FirstName' AND @OrderByDirection = 'DESC' THEN firstname END desc ,
+    	CASE WHEN @orderByField		= 'Company' AND @OrderByDirection = 'ASC' THEN company END ASC,
+		CASE WHEN @orderByField		= 'Company' AND @OrderByDirection = 'DESC' THEN company END desc, 
+		
+		CASE WHEN @orderByField		= 'City' AND @OrderByDirection = 'ASC' THEN city END ASC,
+		CASE WHEN @orderByField		= 'City' AND @OrderByDirection = 'DESC' THEN city END desc ,
+		
+		--CASE WHEN @orderByField		= 'State' AND @OrderByDirection = 'ASC' THEN [state] END ASC,
+		--CASE WHEN @orderByField		= 'State' AND @OrderByDirection = 'DESC' THEN [state] END desc ,
+				
+		CASE WHEN len(@orderByField)=0 THEN u.userid END ASC;
+
+	
+	declare @rCount int
+	select @rCount=count(*)  from @tempTable	
+		
+	declare @numberOfPages int
+	
+	if(@PageSize = -1)
+	begin
+		set @numberOfPages = 1;
+	end
+	else
+	begin
+		set @numberOfPages =@rCount/ @PageSize
+		if(@rCount % @PageSize>0)
+		begin
+			set @numberOfPages=@numberOfPages + 1
+		end
+	end	
+	
+	
+		
+select  *,
+	@rCount as [totalrecords]
+		,@PageSize as [RecordsperPage]
+		,
+		case @PageSize
+		when -1 then 1
+		else @numberOfPages
+		end  as [NumberOfPages]
+		,
+		case @PageSize 
+		when -1 then 1--'Page 1 of 1'
+		else @CurrentPage--'Page ' + cast(@CurrentPage as varchar(15)) + ' of ' + cast(@numberOfPages as varchar(15))
+		end   as [CurrentPage]	 
+		
+		from @tempTable where 1=1   
+	and rowid > @firstrec AND rowid < @lastrec ;
+	
+
+
+end
+
+GO
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Donation_Merge]    Script Date: 1/19/2020 9:10:42 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Donation_Merge]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Donation_Merge]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Donation_Merge]    Script Date: 1/19/2020 9:10:42 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Donation_Merge]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[GIBS_Donation_Merge] AS' 
+END
+GO
+
+ALTER procedure [dbo].[GIBS_Donation_Merge]
+(
+	@MasterClientID int,@ChildClientID int
+)
+as
+BEGIN
+begin tran
+	--declare @MasterClientID int,@ChildClientID int
+	--set @masterclientid=8918
+	--set @childclientid=8917
+	-- Take the child data and put it in seperate tables for historical purposes
+	-- gibs_fbclients
+	SET IDENTITY_INSERT GIBS_DonationTracker_merged ON
+ 	        insert into GIBS_DonationTracker_merged(ModuleID,DonationID,UserID,DriveID,
+				DonationDate,DonationAmount,DonationType,Followup,Notes,CreatedByUser,CreatedDate, PledgeDate, DonationFrom, TypeOfDonation, Source)
+			select ModuleID,DonationID,UserID,DriveID,
+				DonationDate,DonationAmount,DonationType,Followup,Notes,CreatedByUser,CreatedDate, PledgeDate, DonationFrom, TypeOfDonation, Source 
+			from GIBS_DonationTracker where userid=@ChildClientID
+	SET IDENTITY_INSERT GIBS_DonationTracker_merged off
+	-- now assign all donations from the child to the master
+	update GIBS_DonationTracker set userid=@MasterClientID where userid=@ChildClientID
+	-- create a record in the lynking table
+	insert into GIBS_DonationTracker_Merged_UserDonor
+	values(@ChildClientID,@MasterClientID)
+	-- now turn off the child user account and append MERGED to the name
+	--declare @portalid int
+	--select @portalid =portalid from userportals where userid=@childclientid
+	--exec DeleteUserPortal @childclientid,@portalid
+	--UPDATE dbo.Users SET IsDeleted = 1 	WHERE  UserId = @childclientid
+	UPDATE UserPortals SET IsDeleted = 1 WHERE UserID = @childclientid
+	select 1
+	commit tran
+	--rollback tran
+END
+
+
+
+GO
+
+

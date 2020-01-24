@@ -1,0 +1,328 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+/** Create Table **/
+
+if not exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_DonationTracker]') and OBJECTPROPERTY(id, N'IsTable') = 1)
+	BEGIN
+		CREATE TABLE {databaseOwner}[{objectQualifier}GIBS_DonationTracker]
+		(
+			[ModuleID] [int] NOT NULL,
+			[DonationID] [int] NOT NULL IDENTITY(1, 1),
+			[UserID] [int] NOT NULL,
+			[DriveID] [int],
+			[DonationDate] [datetime] NOT NULL,
+			[DonationAmount] [money] NULL,
+			[DonationType] [nvarchar](255) NULL,
+			[Followup] [bit] NULL,
+			[Notes] [ntext] NULL,
+			[CreatedByUser] [int] NOT NULL,
+			[CreatedDate] [datetime] NOT NULL
+		)
+
+		ALTER TABLE {databaseOwner}[{objectQualifier}GIBS_DonationTracker] ADD CONSTRAINT [PK_{objectQualifier}GIBS_DonationTracker] PRIMARY KEY CLUSTERED  ([DonationID])
+		CREATE NONCLUSTERED INDEX [IX_{objectQualifier}GIBS_DonationTracker] ON {databaseOwner}[{objectQualifier}GIBS_DonationTracker] ([ModuleID])
+
+		ALTER TABLE {databaseOwner}[{objectQualifier}GIBS_DonationTracker] WITH NOCHECK ADD CONSTRAINT [FK_{objectQualifier}GIBS_DonationTracker_{objectQualifier}Modules] FOREIGN KEY ([ModuleID]) REFERENCES {databaseOwner}[{objectQualifier}Modules] ([ModuleID]) ON DELETE CASCADE NOT FOR REPLICATION
+	END
+GO
+
+
+/** Create Table DonationTrackerDrives **/
+
+if not exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_DonationTrackerDrives]') and OBJECTPROPERTY(id, N'IsTable') = 1)
+	BEGIN
+		CREATE TABLE {databaseOwner}[{objectQualifier}GIBS_DonationTrackerDrives]
+		(
+			[ModuleID] [int] NOT NULL,
+			[DriveID] [int] NOT NULL IDENTITY(1, 1),
+			[DriveName] [ntext] NOT NULL,
+			[DriveDate] [datetime] NOT NULL,
+			[Description] [ntext] NULL,
+			[CreatedByUser] [int] NOT NULL,
+			[CreatedDate] [datetime] NOT NULL,
+			[isActive] [bit] NOT NULL
+		)
+
+		ALTER TABLE {databaseOwner}[{objectQualifier}GIBS_DonationTrackerDrives] ADD CONSTRAINT [PK_{objectQualifier}GIBS_DonationTrackerDrives] PRIMARY KEY CLUSTERED  ([DriveID])
+		CREATE NONCLUSTERED INDEX [IX_{objectQualifier}GIBS_DonationTrackerDrives] ON {databaseOwner}[{objectQualifier}GIBS_DonationTrackerDrives] ([ModuleID])
+
+		ALTER TABLE {databaseOwner}[{objectQualifier}GIBS_DonationTrackerDrives] WITH NOCHECK ADD CONSTRAINT [FK_{objectQualifier}GIBS_DonationTrackerDrives_{objectQualifier}Modules] FOREIGN KEY ([ModuleID]) REFERENCES {databaseOwner}[{objectQualifier}Modules] ([ModuleID]) ON DELETE CASCADE NOT FOR REPLICATION
+	END
+GO
+
+
+
+/** Drop Existing Stored Procedures **/
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_GetDonationTrackers]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_GetDonationTrackers
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_GetDonationTracker]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_GetDonationTracker
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_AddDonationTracker]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_AddDonationTracker
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_UpdateDonationTracker]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_UpdateDonationTracker
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_DeleteDonationTracker]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_DeleteDonationTracker
+GO
+
+/*** DELETE DRIVES LIST ***/
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_GetDonationTrackerDrives]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_GetDonationTrackerDrives
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_GetDonationTrackerDrive]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_GetDonationTrackerDrive
+GO
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}GIBS_AddDonationTrackerDrive]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	drop procedure {databaseOwner}{objectQualifier}GIBS_AddDonationTrackerDrive
+GO
+
+
+/** Create Stored Procedures **/
+
+
+create procedure {databaseOwner}GIBS_GetDonationTrackers
+
+	@ModuleId int,
+	@DonationUserID int
+
+as
+
+SELECT     GIBS_DonationTracker.ModuleID, GIBS_DonationTracker.DonationID, GIBS_DonationTracker.UserID, GIBS_DonationTracker.DriveID, 
+                      GIBS_DonationTracker.DonationDate, GIBS_DonationTracker.DonationAmount, GIBS_DonationTracker.DonationType, GIBS_DonationTracker.Followup, 
+                      GIBS_DonationTracker.Notes as DonationNotes, GIBS_DonationTracker.CreatedByUser, GIBS_DonationTracker.CreatedDate, GIBS_DonationTrackerDrives.DriveName,
+                      'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName,
+                      'DonationUserName' = DU.FirstName + ' ' + DU.LastName
+FROM         GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTracker.CreatedByUser = CU.UserID                       
+                      
+                      
+                      
+                      INNER JOIN
+                      GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId) 
+AND (GIBS_DonationTracker.UserID = @DonationUserID)
+
+GO
+
+create procedure {databaseOwner}GIBS_GetDonationTracker
+
+	@ModuleId int,
+    @DonationID int
+
+as
+
+SELECT     GIBS_DonationTracker.ModuleID, GIBS_DonationTracker.DonationID, GIBS_DonationTracker.UserID, GIBS_DonationTracker.DriveID, 
+                      GIBS_DonationTracker.DonationDate, GIBS_DonationTracker.DonationAmount, GIBS_DonationTracker.DonationType, GIBS_DonationTracker.Followup, 
+                      GIBS_DonationTracker.Notes as DonationNotes, GIBS_DonationTracker.CreatedByUser, GIBS_DonationTracker.CreatedDate, GIBS_DonationTrackerDrives.DriveName,
+                      'CreatedByUserName' = CU.FirstName + ' ' + CU.LastName,
+                      'DonationUserName' = DU.FirstName + ' ' + DU.LastName
+FROM         GIBS_DonationTracker 
+
+left outer JOIN
+                      Users DU ON GIBS_DonationTracker.UserID = DU.UserID  
+left outer JOIN
+                      Users CU ON GIBS_DonationTracker.CreatedByUser = CU.UserID                       
+                      
+                      
+                      
+                      INNER JOIN
+                      GIBS_DonationTrackerDrives ON GIBS_DonationTracker.DriveID = GIBS_DonationTrackerDrives.DriveID
+WHERE     (GIBS_DonationTracker.ModuleID = @ModuleId) 
+AND (GIBS_DonationTracker.DonationID = @DonationID)
+
+GO
+
+
+create procedure {databaseOwner}{objectQualifier}GIBS_AddDonationTracker
+
+	@ModuleId       int,
+	@DonationUserID         int,
+	@DriveID         int,
+	@DonationDate	datetime,
+	@DonationAmount money,
+	@DonationType varchar(100),
+	@Followup 	bit,
+	@DonationNotes		ntext,
+	@UserId	int
+	
+	
+
+as
+
+insert into {objectQualifier}GIBS_DonationTracker (
+	ModuleID, 
+	UserID, 
+	DriveID, 
+	DonationDate, 
+	DonationAmount, 
+	DonationType, 
+	Followup, 
+	Notes, 
+	CreatedByUser, 
+	CreatedDate
+) 
+values (
+	@ModuleId,
+	@DonationUserID,
+	@DriveID,
+	@DonationDate,
+	@DonationAmount,
+	@DonationType,
+	@Followup,
+	@DonationNotes,
+	@UserId,
+	getdate()
+)
+
+GO
+
+create procedure {databaseOwner}{objectQualifier}GIBS_UpdateDonationTracker
+
+	@ModuleId       int,
+	@DonationID         int,
+	@DriveID         int,
+	@DonationDate	datetime,
+	@DonationAmount money,
+	@DonationType varchar(100),
+	@Followup 	bit,
+	@DonationNotes		ntext
+
+as
+
+update {objectQualifier}GIBS_DonationTracker
+set    DriveID       = @DriveID,
+		DonationDate = @DonationDate,
+		DonationAmount = @DonationAmount,
+		DonationType = @DonationType,
+		Followup = @Followup,
+		Notes = @DonationNotes
+		
+where  ModuleId = @ModuleId
+and    DonationID = @DonationID
+
+GO
+
+create procedure {databaseOwner}{objectQualifier}GIBS_DeleteDonationTracker
+
+	@ModuleId       int,
+    @DonationID         int
+
+as
+
+delete
+from   {objectQualifier}GIBS_DonationTracker
+where  ModuleId = @ModuleId
+and    DonationID = @DonationID
+
+GO
+
+/************************************************************/
+/*****              DRIVES                     *****/
+/************************************************************/
+
+create procedure {databaseOwner}{objectQualifier}GIBS_GetDonationTrackerDrives
+
+	@ModuleId int
+
+as
+
+select ModuleId,
+       DriveID,
+       DriveName,
+	   DriveDate,
+	   [Description],
+       CreatedByUser,
+       CreatedDate,
+	   isActive,
+       'CreatedByUserName' = {objectQualifier}Users.FirstName + ' ' + {objectQualifier}Users.LastName
+from {objectQualifier}GIBS_DonationTrackerDrives
+left outer join {objectQualifier}Users on {objectQualifier}GIBS_DonationTrackerDrives.CreatedByUser = {objectQualifier}Users.UserId
+where  ModuleId = @ModuleId 
+order by  CAST([DriveName] AS VARCHAR(500))
+GO
+
+create procedure {databaseOwner}{objectQualifier}GIBS_GetDonationTrackerDrive
+
+	@ModuleId int,
+    @DriveID int
+
+as
+
+select ModuleId,
+       DriveID,
+	   DriveName,
+	   DriveDate,
+       [Description],
+       CreatedByUser,
+       CreatedDate,
+	   isActive,
+       'CreatedByUserName' = {objectQualifier}Users.FirstName + ' ' + {objectQualifier}Users.LastName
+from {objectQualifier}GIBS_DonationTrackerDrives
+left outer join {objectQualifier}Users on {objectQualifier}GIBS_DonationTrackerDrives.CreatedByUser = {objectQualifier}Users.UserId
+where  ModuleId = @ModuleId
+and DriveID = @DriveID
+
+GO
+
+
+create procedure {databaseOwner}{objectQualifier}GIBS_AddDonationTrackerDrive
+
+	@ModuleId       int,
+	@DriveName	varchar(500),
+	@DriveDate datetime,
+	@Description        ntext,
+	@isActive	bit,
+	@UserID         int
+
+as
+
+insert into {objectQualifier}GIBS_DonationTrackerDrives (
+	ModuleId,
+	DriveName,
+	DriveDate,
+	[Description],
+	isActive,
+	CreatedByUser,
+	CreatedDate
+) 
+values (
+	@ModuleId,
+	@DriveName,
+	@DriveDate,
+	@Description,
+	@isActive,
+	@UserID,
+	getdate()
+)
+
+GO
+
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/
