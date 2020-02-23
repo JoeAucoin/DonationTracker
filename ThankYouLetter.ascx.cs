@@ -83,30 +83,30 @@ namespace GIBS.Modules.DonationTracker
         {
             try
             {
-                DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
-                if (settingsData.ReportCredentialsDomain != null)
+                //  DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
+                if (Settings.Contains("ReportCredentialsDomain"))
                 {
-                    _ReportCredentialsDomain = settingsData.ReportCredentialsDomain.ToString();
+                    _ReportCredentialsDomain = Settings["ReportCredentialsDomain"].ToString();
                 }
 
-                if (settingsData.ReportCredentialsPassword != null)
+                if (Settings.Contains("ReportCredentialsPassword"))
                 {
-                    _ReportCredentialsPassword = settingsData.ReportCredentialsPassword.ToString();
+                    _ReportCredentialsPassword = Settings["ReportCredentialsPassword"].ToString();
                 }
 
-                if (settingsData.ReportCredentialsUserName != null)
+                if (Settings.Contains("ReportCredentialsUserName"))
                 {
-                    _ReportCredentialsUserName = settingsData.ReportCredentialsUserName;
+                    _ReportCredentialsUserName = Settings["ReportCredentialsUserName"].ToString();
                 }
 
-                if (settingsData.ReportPath != null)
+                if (Settings.Contains("ReportPath"))
                 {
-                    _ReportPath = settingsData.ReportPath.ToString();
+                    _ReportPath = Settings["ReportPath"].ToString();
                 }
 
-                if (settingsData.ReportServerURL != null)
+                if (Settings.Contains("ReportServerURL"))
                 {
-                    _ReportServerURL = settingsData.ReportServerURL.ToString();
+                    _ReportServerURL = Settings["ReportServerURL"].ToString();
                 }
 
 

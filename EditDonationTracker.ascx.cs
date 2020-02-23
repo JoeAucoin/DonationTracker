@@ -30,7 +30,7 @@ namespace GIBS.Modules.DonationTracker
         // To show custom operations...
         private List<int> mQuantities = new List<int>();
 
-        protected string RoleName = "Registered Users";
+        protected string _RoleName = "Registered Users";
         int DonationID = Null.NullInteger;
         int DonationUserId = Null.NullInteger;
         public int DonorPortal;
@@ -255,15 +255,14 @@ namespace GIBS.Modules.DonationTracker
         {
             try
             {
-                DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
-
-                if (settingsData.RoleName != null)
+               
+                if (Settings.Contains("RoleName"))
                 {
-                    RoleName = settingsData.RoleName;
+                    _RoleName = Settings["RoleName"].ToString();
                 }
-                if (settingsData.ShowSendPassword != null)
+                if (Settings.Contains("ShowSendPassword"))
                 {
-                    if (Convert.ToBoolean(settingsData.ShowSendPassword) == true)
+                    if (Convert.ToBoolean(Settings["ShowSendPassword"].ToString()) == true)
                     {
                         cmdSendCredentials.Visible = true;
                     }
@@ -274,9 +273,9 @@ namespace GIBS.Modules.DonationTracker
                 
                 }
 
-                if (settingsData.ShowDonationHistory != null)
+                if (Settings.Contains("ShowDonationHistory"))
                 {
-                    if (Convert.ToBoolean(settingsData.ShowDonationHistory) == true)
+                    if (Convert.ToBoolean(Settings["ShowDonationHistory"].ToString()) == true)
                     {
                         GridViewDonations.Visible = true;
                     }
@@ -287,14 +286,11 @@ namespace GIBS.Modules.DonationTracker
                     }
 
                 }
-                //else
-                //{
-                //    GridViewDonations.Visible = false;
-                //}
 
-                if (settingsData.ReportsRole != null)
+
+                if (Settings.Contains("ReportsRole"))
                 {
-                    string _ReportsRole = settingsData.ReportsRole;
+                    string _ReportsRole = Settings["ReportsRole"].ToString();
                     var roleGroup = UserInfo.IsInRole(_ReportsRole);
 
                     if (roleGroup == true)
@@ -309,9 +305,9 @@ namespace GIBS.Modules.DonationTracker
                 }
 
 
-                if (settingsData.MergeRole != null)
+                if (Settings.Contains("MergeRole"))
                 {
-                    string _ReportsRole = settingsData.MergeRole;
+                    string _ReportsRole = Settings["MergeRole"].ToString();
                     var roleGroup = UserInfo.IsInRole(_ReportsRole);
 
                     if (roleGroup == true)
@@ -355,8 +351,6 @@ namespace GIBS.Modules.DonationTracker
             {
 
                 DotNetNuke.Entities.Users.UserInfo DonationUser = DotNetNuke.Entities.Users.UserController.GetUserById(DonorPortal, RecordID);
-
-              //  SetPageName(DonationUser.Profile.GetPropertyValue("Company") + " - " + DonationUser.FirstName + " " + DonationUser.LastName);
 
                 LabelDonorName.Text = DonationUser.Profile.GetPropertyValue("Company") + " - " + DonationUser.FirstName + " " + DonationUser.LastName;
 
@@ -945,7 +939,7 @@ namespace GIBS.Modules.DonationTracker
                 }
                 else
                 {
-                    CreateNewUser(RoleName);
+                    CreateNewUser(_RoleName);
                 }
 
 
@@ -1046,16 +1040,6 @@ namespace GIBS.Modules.DonationTracker
                 oUser.Profile.SetProfileProperty("DoNotMail", cbxDoNotMail.Checked.ToString());
                 oUser.Profile.SetProfileProperty("Anonymous", cbxAnonymous.Checked.ToString());
 
-                //                +DonationUser.Profile.GetPropertyValue("AltStreet").ToString() + Environment.NewLine
-                //+ DonationUser.Profile.GetPropertyValue("AltCity").ToString() + ", "
-                //+ DonationUser.Profile.GetPropertyValue("AltState").ToString() + " "
-                //+ DonationUser.Profile.GetPropertyValue("AltPostalCode").ToString();
-                //txtAltStreet.Text = DonationUser.Profile.GetPropertyValue("AltStreet");
-                //txtAltCity.Text = DonationUser.Profile.GetPropertyValue("AltCity");
-                //txtAltState.Text = DonationUser.Profile.GetPropertyValue("AltState");
-                //txtAltZip.Text = DonationUser.Profile.GetPropertyValue("AltPostalCode");
-                //txtComments.Text = DonationUser.Profile.GetPropertyValue("Comments");
-
                 oUser.Profile.SetProfileProperty("AltStreet", txtAltStreet.Text.ToString());
                 oUser.Profile.SetProfileProperty("AltCity", txtAltCity.Text.ToString());
                 oUser.Profile.SetProfileProperty("AltState", txtAltState.Text.ToString());
@@ -1098,13 +1082,13 @@ namespace GIBS.Modules.DonationTracker
                     }
 
                     //string EmailContent = settingsData.EmailMessage + content;
-                    DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
+                    //    DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
 
-                    if (settingsData.EmailNewUserCredentials != null)
+                    if (Settings.Contains("EmailNewUserCredentials"))
                     {
-                        if (Convert.ToBoolean(settingsData.EmailNewUserCredentials) == true)
+                        if (Convert.ToBoolean(Settings["EmailNewUserCredentials"].ToString()) == true)
                         {
-                            string EmailContent = settingsData.EmailMessage + "<p>UserName: " + txtEmail.Text.ToString() + "<br />";
+                            string EmailContent = Settings["EmailMessage"].ToString() + "<p>UserName: " + txtEmail.Text.ToString() + "<br />";
                             EmailContent += "Password: " + vPassword.ToString() + "<br />";
                             EmailContent += "Site: http://" + Request.Url.Host + "</p>";
 
@@ -1157,17 +1141,17 @@ namespace GIBS.Modules.DonationTracker
 
             try
             {
-                DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
+              //  DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
                 // BUILD E-MAIL BODY
 
                 string EmailContent = content;
-                string subject = settingsData.EmailSubject.ToString();
+                string subject = Settings["EmailSubject"].ToString() ;
                 
                 // LOOK FOR THE FROM EMAIL ADDRESS
                 string EmailFrom = "";
-                if (settingsData.EmailFrom.Length > 1)
+                if (Settings["EmailFrom"].ToString().Length > 1)
                 {
-                    EmailFrom = settingsData.EmailFrom.ToString();
+                    EmailFrom = Settings["EmailFrom"].ToString();
                 }
                 else
                 {
@@ -1175,9 +1159,9 @@ namespace GIBS.Modules.DonationTracker
                 }
                 // LOOK FOR BCC ADDRESS
                 string EmailBCC = "";
-                if (settingsData.EmailBCC.Length > 1)
+                if (Settings["EmailBCC"].ToString().Length > 1)
                 {
-                    EmailBCC = settingsData.EmailBCC;
+                    EmailBCC = Settings["EmailBCC"].ToString();
                 }
                 else
                 {

@@ -18,46 +18,9 @@ namespace GIBS.DonationTracker.Components
     /// <summary>
     /// Provides strong typed access to settings used by module
     /// </summary>
-    public class DonationTrackerSettings
+    public class DonationTrackerSettings: ModuleSettingsBase 
     {
-        ModuleController controller;
-        int tabModuleId;
-
-        public DonationTrackerSettings(int tabModuleId)
-        {
-            controller = new ModuleController();
-            this.tabModuleId = tabModuleId;
-        }
-
-        protected T ReadSetting<T>(string settingName, T defaultValue)
-        {
-            Hashtable settings = controller.GetTabModuleSettings(this.tabModuleId);
-         
-
-            T ret = default(T);
-
-            if (settings.ContainsKey(settingName))
-            {
-                System.ComponentModel.TypeConverter tc = System.ComponentModel.TypeDescriptor.GetConverter(typeof(T));
-                try
-                {
-                    ret = (T)tc.ConvertFrom(settings[settingName]);
-                }
-                catch
-                {
-                    ret = defaultValue;
-                }
-            }
-            else
-                ret = defaultValue;
-
-            return ret;
-        }
-
-        protected void WriteSetting(string settingName, string value)
-        {
-            controller.UpdateTabModuleSetting(this.tabModuleId, settingName, value);
-        }
+   
 
         #region public properties
 
@@ -65,109 +28,263 @@ namespace GIBS.DonationTracker.Components
         /// get/set template used to render the module content
         /// to the user
         /// </summary>
+
+
+
         public string NumPerPage
         {
-            get { return ReadSetting<string>("numPerPage", null); }
-            set { WriteSetting("numPerPage", value); }
+            get
+            {
+                if (Settings.Contains("NumPerPage"))
+                    return Settings["NumPerPage"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "NumPerPage", value.ToString());
+            }
         }
 
         public string RoleName
         {
-            get { return ReadSetting<string>("roleName", null); }
-            set { WriteSetting("roleName", value); }
+            get
+            {
+                if (Settings.Contains("RoleName"))
+                    return Settings["RoleName"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "RoleName", value.ToString());
+            }
         }
 
         public string ReportsRole
         {
-            get { return ReadSetting<string>("reportsRole", null); }
-            set { WriteSetting("reportsRole", value); }
+            get
+            {
+                if (Settings.Contains("ReportsRole"))
+                    return Settings["ReportsRole"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "ReportsRole", value.ToString());
+            }
         }
 
         public string MergeRole
         {
-            get { return ReadSetting<string>("mergeRole", null); }
-            set { WriteSetting("mergeRole", value); }
-        }	
+            get
+            {
+                if (Settings.Contains("MergeRole"))
+                    return Settings["MergeRole"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "MergeRole", value.ToString());
+            }
+        }
 
         public string EmailFrom
         {
-            get { return ReadSetting<string>("emailFrom", null); }
-            set { WriteSetting("emailFrom", value); }
+            get
+            {
+                if (Settings.Contains("EmailFrom"))
+                    return Settings["EmailFrom"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "EmailFrom", value.ToString());
+            }
         }
 
         public string EmailBCC
         {
-            get { return ReadSetting<string>("emailBCC", null); }
-            set { WriteSetting("emailBCC", value); }
+            get
+            {
+                if (Settings.Contains("EmailBCC"))
+                    return Settings["EmailBCC"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "EmailBCC", value.ToString());
+            }
         }
 
         public string EmailSubject
         {
-            get { return ReadSetting<string>("emailSubject", null); }
-            set { WriteSetting("emailSubject", value); }
+            get
+            {
+                if (Settings.Contains("EmailSubject"))
+                    return Settings["EmailSubject"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "EmailSubject", value.ToString());
+            }
         }
 
         public string EmailMessage
         {
-            get { return ReadSetting<string>("emailMessage", null); }
-            set { WriteSetting("emailMessage", value); }
+            get
+            {
+                if (Settings.Contains("EmailMessage"))
+                    return Settings["EmailMessage"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "EmailMessage", value.ToString());
+            }
         }
 
         public string ShowSendPassword
         {
-            get { return ReadSetting<string>("showSendPassword", null); }
-            set { WriteSetting("showSendPassword", value); }
+            get
+            {
+                if (Settings.Contains("ShowSendPassword"))
+                    return Settings["ShowSendPassword"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "ShowSendPassword", value.ToString());
+            }
         }
 
         public string EmailNewUserCredentials
         {
-            get { return ReadSetting<string>("emailNewUserCredentials", null); }
-            set { WriteSetting("emailNewUserCredentials", value); }
+            get
+            {
+                if (Settings.Contains("EmailNewUserCredentials"))
+                    return Settings["EmailNewUserCredentials"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "EmailNewUserCredentials", value.ToString());
+            }
         }
 
         public string ShowDonationHistory
         {
-            get { return ReadSetting<string>("showDonationHistory", null); }
-            set { WriteSetting("showDonationHistory", value); }
+            get
+            {
+                if (Settings.Contains("ShowDonationHistory"))
+                    return Settings["ShowDonationHistory"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "ShowDonationHistory", value.ToString());
+            }
         }
 
         public string EnableAddNewDonor
         {
-            get { return ReadSetting<string>("enableAddNewDonor", null); }
-            set { WriteSetting("enableAddNewDonor", value); }
+            get
+            {
+                if (Settings.Contains("EnableAddNewDonor"))
+                    return Settings["EnableAddNewDonor"].ToString();
+                return "";
+            }
+            set
+            { 
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "EnableAddNewDonor", value.ToString());
+            }
         }
-
 
         public string ReportServerURL
         {
-            get { return ReadSetting<string>("reportServerURL", null); }
-            set { WriteSetting("reportServerURL", value); }
+            get
+            {
+                if (Settings.Contains("ReportServerURL"))
+                    return Settings["ReportServerURL"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "ReportServerURL", value.ToString());
+            }
         }
 
         public string ReportPath
         {
-            get { return ReadSetting<string>("reportPath", null); }
-            set { WriteSetting("reportPath", value); }
+            get
+            {
+                if (Settings.Contains("ReportPath"))
+                    return Settings["ReportPath"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "ReportPath", value.ToString());
+            }
         }
 
         public string ReportCredentialsUserName
         {
-            get { return ReadSetting<string>("reportCredentialsUserName", null); }
-            set { WriteSetting("reportCredentialsUserName", value); }
+            get
+            {
+                if (Settings.Contains("ReportCredentialsUserName"))
+                    return Settings["ReportCredentialsUserName"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "ReportCredentialsUserName", value.ToString());
+            }
         }
 
         public string ReportCredentialsPassword
         {
-            get { return ReadSetting<string>("reportCredentialsPassword", null); }
-            set { WriteSetting("reportCredentialsPassword", value); }
+            get
+            {
+                if (Settings.Contains("ReportCredentialsPassword"))
+                    return Settings["ReportCredentialsPassword"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "ReportCredentialsPassword", value.ToString());
+            }
         }
 
         public string ReportCredentialsDomain
         {
-            get { return ReadSetting<string>("reportCredentialsDomain", null); }
-            set { WriteSetting("reportCredentialsDomain", value); }
+            get
+            {
+                if (Settings.Contains("ReportCredentialsDomain"))
+                    return Settings["ReportCredentialsDomain"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateModuleSetting(ModuleId, "ReportCredentialsDomain", value.ToString());
+            }
         }
-
 
         #endregion
     }

@@ -1,0 +1,116 @@
+﻿<dotnetnuke type="ResourceFile" version="5.0">
+  <files>
+    <file>
+      <path>JavaScript/</path>
+      <name>jquery.maskedinput-1.3.js</name>
+    </file>
+    <file>
+      <path>JavaScript/</path>
+      <name>jquery.watermarkinput.js</name>
+    </file>
+    <file>
+      <path>Documentation/</path>
+      <name>Documentation.css</name>
+    </file>
+    <file>
+      <path>Documentation/</path>
+      <name>Documentation.html</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>icon_money.png</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>icon_pledge.png</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>No-mail.png</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>no.png</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>nomail.png</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>search.png</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>yes.png</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>DonationMerge.ascx.resx</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>EditDonationTracker.ascx.resx</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>ListDrives.ascx.resx</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>ListLetters.ascx.resx</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>ReportSearch.ascx.resx</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>ReportSummary.ascx.resx</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>Settings.ascx.resx</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>ViewDonationTracker.ascx.resx</name>
+    </file>
+    <file>
+      <path />
+      <name>DonationMerge.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>EditDonationTracker.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>ListDrives.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>ListLetters.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>ReportSearch.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>ReportSummary.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>Settings.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>ThankYouLetter.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>ViewDonationTracker.ascx</name>
+    </file>
+  </files>
+</dotnetnuke>

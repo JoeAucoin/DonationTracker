@@ -9,7 +9,7 @@ using DotNetNuke.Entities.Profile;
 
 namespace GIBS.Modules.DonationTracker
 {
-    public partial class Settings : ModuleSettingsBase
+    public partial class Settings : DonationTrackerSettings
     {
 
         /// <summary>
@@ -24,90 +24,91 @@ namespace GIBS.Modules.DonationTracker
                 {
                     GetRoles();
                     
-                    DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
+                  //  DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
 
-                    if (settingsData.RoleName != null)
-                    {
-                        ddlRoles.SelectedValue = settingsData.RoleName;
+                 //   if (RoleName != null)
+                        if (Settings.Contains("RoleName"))
+                        {
+                        ddlRoles.SelectedValue = RoleName;
                     }
-                    if (settingsData.NumPerPage != null)
+                    if (NumPerPage != null)
                     {
-                        ddlNumPerPage.SelectedValue = settingsData.NumPerPage;
+                        ddlNumPerPage.SelectedValue = NumPerPage;
                     }
-                    if (settingsData.EmailMessage != null)
+                    if (EmailMessage != null)
                     {
-                        txtEmailMessage.Text = settingsData.EmailMessage;
+                        txtEmailMessage.Text = EmailMessage;
                     }
-                    if (settingsData.EmailFrom != null)
+                    if (EmailFrom != null)
                     {
-                        txtEmailFrom.Text = settingsData.EmailFrom;
-                    }
-
-                    if (settingsData.EmailBCC != null)
-                    {
-                        txtEmailBCC.Text = settingsData.EmailBCC;
+                        txtEmailFrom.Text = EmailFrom;
                     }
 
-                    if (settingsData.EmailSubject != null)
+                    if (EmailBCC != null)
                     {
-                        txtEmailSubject.Text = settingsData.EmailSubject;
+                        txtEmailBCC.Text = EmailBCC;
                     }
 
-                    if (settingsData.ReportsRole != null || settingsData.ReportsRole.Length > 0)
+                    if (EmailSubject != null)
                     {
-                        ddlReportsRoles.SelectedValue = settingsData.ReportsRole;
+                        txtEmailSubject.Text = EmailSubject;
+                    }
+
+                    if (ReportsRole != null || ReportsRole.Length > 0)
+                    {
+                        ddlReportsRoles.SelectedValue = ReportsRole;
                     }
                     
-                    if (settingsData.MergeRole != null)
+                    if (MergeRole != null)
                     {
-                        ddlMergeRoles.SelectedValue = settingsData.MergeRole;
+                        ddlMergeRoles.SelectedValue = MergeRole;
                     }
 
 
-                    if (settingsData.ShowSendPassword != null)
+                    if (Settings.Contains("ShowSendPassword"))
                     {
-                        cbxShowSendPassword.Checked = Convert.ToBoolean(settingsData.ShowSendPassword);
-                    }
-                    
-                    if (settingsData.EmailNewUserCredentials != null)
-                    {
-                        cbxEmailNewUserCredentials.Checked = Convert.ToBoolean(settingsData.EmailNewUserCredentials);
+                        cbxShowSendPassword.Checked = Convert.ToBoolean(ShowSendPassword);
                     }
 
-                    if (settingsData.ShowDonationHistory != null)
+                    if (Settings.Contains("EmailNewUserCredentials"))
                     {
-                        cbxShowDonationHistory.Checked = Convert.ToBoolean(settingsData.ShowDonationHistory);
+                        cbxEmailNewUserCredentials.Checked = Convert.ToBoolean(EmailNewUserCredentials);
                     }
 
-                    if (settingsData.EnableAddNewDonor != null)
+                    if (Settings.Contains("ShowDonationHistory"))
                     {
-                        cbxEnableAddNewDonor.Checked = Convert.ToBoolean(settingsData.EnableAddNewDonor);
+                        cbxShowDonationHistory.Checked = Convert.ToBoolean(ShowDonationHistory);
+                    }
+
+                    if (Settings.Contains("EnableAddNewDonor"))
+                    {
+                        cbxEnableAddNewDonor.Checked = Convert.ToBoolean(EnableAddNewDonor);
                     }
 
 
-                    if (settingsData.ReportServerURL != null)
+                    if (ReportServerURL != null)
                     {
-                        txturlReportServer.Text = settingsData.ReportServerURL.ToString();
+                        txturlReportServer.Text = ReportServerURL.ToString();
                     }
 
-                    if (settingsData.ReportPath != null)
+                    if (ReportPath != null)
                     {
-                        txtReportPath.Text = settingsData.ReportPath.ToString();
+                        txtReportPath.Text = ReportPath.ToString();
                     }
 
-                    if (settingsData.ReportCredentialsUserName != null)
+                    if (ReportCredentialsUserName != null)
                     {
-                        txtRSCredentialsUserName.Text = settingsData.ReportCredentialsUserName.ToString();
+                        txtRSCredentialsUserName.Text = ReportCredentialsUserName.ToString();
                     }
 
-                    if (settingsData.ReportCredentialsPassword != null)
+                    if (ReportCredentialsPassword != null)
                     {
 
-                        txtRSCredentialsPassword.Text = settingsData.ReportCredentialsPassword.ToString();
+                        txtRSCredentialsPassword.Text = ReportCredentialsPassword.ToString();
                     }
-                    if (settingsData.ReportCredentialsDomain != null)
+                    if (ReportCredentialsDomain != null)
                     {
-                        txtRSCredentialsDomain.Text = settingsData.ReportCredentialsDomain.ToString();
+                        txtRSCredentialsDomain.Text = ReportCredentialsDomain.ToString();
                     }
 
                     txtProfileCheckAnonymous.Text = CheckProfilePropertyExistsTrueFalse("Anonymous").ToString();
@@ -316,25 +317,25 @@ namespace GIBS.Modules.DonationTracker
         {
             try
             {
-                DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
-                settingsData.NumPerPage = ddlNumPerPage.SelectedValue;
-                settingsData.RoleName = ddlRoles.SelectedValue;
-                settingsData.EmailMessage = txtEmailMessage.Text;
-                settingsData.EmailFrom = txtEmailFrom.Text;
-                settingsData.EmailSubject = txtEmailSubject.Text;
-                settingsData.EmailBCC = txtEmailBCC.Text;
-                settingsData.ReportsRole = ddlReportsRoles.SelectedValue;
-                settingsData.MergeRole = ddlMergeRoles.SelectedValue;
-                settingsData.ShowSendPassword = cbxShowSendPassword.Checked.ToString();
-                settingsData.EmailNewUserCredentials = cbxEmailNewUserCredentials.Checked.ToString();
-                settingsData.ShowDonationHistory = cbxShowDonationHistory.Checked.ToString();
-                settingsData.EnableAddNewDonor = cbxEnableAddNewDonor.Checked.ToString();
+            
+                NumPerPage = ddlNumPerPage.SelectedValue;
+                RoleName = ddlRoles.SelectedValue;
+                EmailMessage = txtEmailMessage.Text;
+                EmailFrom = txtEmailFrom.Text;
+                EmailSubject = txtEmailSubject.Text;
+                EmailBCC = txtEmailBCC.Text;
+                ReportsRole = ddlReportsRoles.SelectedValue;
+                MergeRole = ddlMergeRoles.SelectedValue;
+                ShowSendPassword = cbxShowSendPassword.Checked.ToString();
+                EmailNewUserCredentials = cbxEmailNewUserCredentials.Checked.ToString();
+                ShowDonationHistory = cbxShowDonationHistory.Checked.ToString();
+                EnableAddNewDonor = cbxEnableAddNewDonor.Checked.ToString();
 
-                settingsData.ReportCredentialsDomain = txtRSCredentialsDomain.Text.ToString();
-                settingsData.ReportCredentialsPassword = txtRSCredentialsPassword.Text.ToString();
-                settingsData.ReportCredentialsUserName = txtRSCredentialsUserName.Text.ToString();
-                settingsData.ReportPath = txtReportPath.Text.ToString();
-                settingsData.ReportServerURL = txturlReportServer.Text.ToString();
+                ReportCredentialsDomain = txtRSCredentialsDomain.Text.ToString();
+                ReportCredentialsPassword = txtRSCredentialsPassword.Text.ToString();
+                ReportCredentialsUserName = txtRSCredentialsUserName.Text.ToString();
+                ReportPath = txtReportPath.Text.ToString();
+                ReportServerURL = txturlReportServer.Text.ToString();
             }
             catch (Exception ex)
             {
