@@ -27,7 +27,7 @@ namespace GIBS.Modules.DonationTracker
                   //  DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
 
                  //   if (RoleName != null)
-                        if (Settings.Contains("RoleName"))
+                        if (Settings.Contains("roleName"))
                         {
                         ddlRoles.SelectedValue = RoleName;
                     }
@@ -65,22 +65,22 @@ namespace GIBS.Modules.DonationTracker
                     }
 
 
-                    if (Settings.Contains("ShowSendPassword"))
+                    if (Settings.Contains("showSendPassword"))
                     {
                         cbxShowSendPassword.Checked = Convert.ToBoolean(ShowSendPassword);
                     }
 
-                    if (Settings.Contains("EmailNewUserCredentials"))
+                    if (Settings.Contains("emailNewUserCredentials"))
                     {
                         cbxEmailNewUserCredentials.Checked = Convert.ToBoolean(EmailNewUserCredentials);
                     }
 
-                    if (Settings.Contains("ShowDonationHistory"))
+                    if (Settings.Contains("showDonationHistory"))
                     {
                         cbxShowDonationHistory.Checked = Convert.ToBoolean(ShowDonationHistory);
                     }
 
-                    if (Settings.Contains("EnableAddNewDonor"))
+                    if (Settings.Contains("enableAddNewDonor"))
                     {
                         cbxEnableAddNewDonor.Checked = Convert.ToBoolean(EnableAddNewDonor);
                     }

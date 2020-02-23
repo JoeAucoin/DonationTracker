@@ -125,10 +125,6 @@ namespace GIBS.Modules.DonationTracker
         {
             int itemID = (int)GridView1.DataKeys[e.RowIndex].Value;
 
-            //GiftCertController controller = new GiftCertController();
-
-            //controller.DeleteGiftCert(this.ModuleId, itemID);
-            //FillGrid();
 
         }
 

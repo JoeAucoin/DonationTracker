@@ -176,25 +176,25 @@ namespace GIBS.Modules.DonationTracker
         {
             try
             {
-                //     DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
-                if (Settings.Contains("NumPerPage"))
+                
+                if (Settings.Contains("numPerPage"))
                 {
-                    PageSize = Int32.Parse(Settings["NumPerPage"].ToString());
+                    PageSize = Int32.Parse(Settings["numPerPage"].ToString());
                 }
 
-                if (Settings.Contains("RoleName"))
+                if (Settings.Contains("roleName"))
                 {
-                    RoleName = Settings["RoleName"].ToString();
+                    RoleName = Settings["roleName"].ToString();
                 }
 
-                if (Settings.Contains("ReportsRole"))
+                if (Settings.Contains("reportsRole"))
                 {
-                    _ReportsRole = Settings["ReportsRole"].ToString();
+                    _ReportsRole = Settings["reportsRole"].ToString();
                 }
 
-                if (Settings.Contains("EnableAddNewDonor"))
+                if (Settings.Contains("enableAddNewDonor"))
                 {
-                    if (Convert.ToBoolean(Settings["EnableAddNewDonor"].ToString()) == true)
+                    if (Convert.ToBoolean(Settings["enableAddNewDonor"].ToString()) == true)
                     {
                         btnAddNewUser.Enabled = true;
                     }

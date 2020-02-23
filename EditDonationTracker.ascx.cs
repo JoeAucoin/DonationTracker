@@ -256,13 +256,13 @@ namespace GIBS.Modules.DonationTracker
             try
             {
                
-                if (Settings.Contains("RoleName"))
+                if (Settings.Contains("roleName"))
                 {
-                    _RoleName = Settings["RoleName"].ToString();
+                    _RoleName = Settings["roleName"].ToString();
                 }
-                if (Settings.Contains("ShowSendPassword"))
+                if (Settings.Contains("showSendPassword"))
                 {
-                    if (Convert.ToBoolean(Settings["ShowSendPassword"].ToString()) == true)
+                    if (Convert.ToBoolean(Settings["showSendPassword"].ToString()) == true)
                     {
                         cmdSendCredentials.Visible = true;
                     }
@@ -273,9 +273,9 @@ namespace GIBS.Modules.DonationTracker
                 
                 }
 
-                if (Settings.Contains("ShowDonationHistory"))
+                if (Settings.Contains("showDonationHistory"))
                 {
-                    if (Convert.ToBoolean(Settings["ShowDonationHistory"].ToString()) == true)
+                    if (Convert.ToBoolean(Settings["showDonationHistory"].ToString()) == true)
                     {
                         GridViewDonations.Visible = true;
                     }
@@ -288,9 +288,9 @@ namespace GIBS.Modules.DonationTracker
                 }
 
 
-                if (Settings.Contains("ReportsRole"))
+                if (Settings.Contains("reportsRole"))
                 {
-                    string _ReportsRole = Settings["ReportsRole"].ToString();
+                    string _ReportsRole = Settings["reportsRole"].ToString();
                     var roleGroup = UserInfo.IsInRole(_ReportsRole);
 
                     if (roleGroup == true)
@@ -305,9 +305,9 @@ namespace GIBS.Modules.DonationTracker
                 }
 
 
-                if (Settings.Contains("MergeRole"))
+                if (Settings.Contains("mergeRole"))
                 {
-                    string _ReportsRole = Settings["MergeRole"].ToString();
+                    string _ReportsRole = Settings["mergeRole"].ToString();
                     var roleGroup = UserInfo.IsInRole(_ReportsRole);
 
                     if (roleGroup == true)
@@ -1084,11 +1084,11 @@ namespace GIBS.Modules.DonationTracker
                     //string EmailContent = settingsData.EmailMessage + content;
                     //    DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
 
-                    if (Settings.Contains("EmailNewUserCredentials"))
+                    if (Settings.Contains("emailNewUserCredentials"))
                     {
-                        if (Convert.ToBoolean(Settings["EmailNewUserCredentials"].ToString()) == true)
+                        if (Convert.ToBoolean(Settings["emailNewUserCredentials"].ToString()) == true)
                         {
-                            string EmailContent = Settings["EmailMessage"].ToString() + "<p>UserName: " + txtEmail.Text.ToString() + "<br />";
+                            string EmailContent = Settings["emailMessage"].ToString() + "<p>UserName: " + txtEmail.Text.ToString() + "<br />";
                             EmailContent += "Password: " + vPassword.ToString() + "<br />";
                             EmailContent += "Site: http://" + Request.Url.Host + "</p>";
 
@@ -1145,13 +1145,13 @@ namespace GIBS.Modules.DonationTracker
                 // BUILD E-MAIL BODY
 
                 string EmailContent = content;
-                string subject = Settings["EmailSubject"].ToString() ;
+                string subject = Settings["emailSubject"].ToString() ;
                 
                 // LOOK FOR THE FROM EMAIL ADDRESS
                 string EmailFrom = "";
-                if (Settings["EmailFrom"].ToString().Length > 1)
+                if (Settings["emailFrom"].ToString().Length > 1)
                 {
-                    EmailFrom = Settings["EmailFrom"].ToString();
+                    EmailFrom = Settings["emailFrom"].ToString();
                 }
                 else
                 {
@@ -1159,9 +1159,9 @@ namespace GIBS.Modules.DonationTracker
                 }
                 // LOOK FOR BCC ADDRESS
                 string EmailBCC = "";
-                if (Settings["EmailBCC"].ToString().Length > 1)
+                if (Settings["emailBCC"].ToString().Length > 1)
                 {
-                    EmailBCC = Settings["EmailBCC"].ToString();
+                    EmailBCC = Settings["emailBCC"].ToString();
                 }
                 else
                 {

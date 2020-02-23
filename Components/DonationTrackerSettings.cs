@@ -35,14 +35,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("NumPerPage"))
-                    return Settings["NumPerPage"].ToString();
+                if (Settings.Contains("numPerPage"))
+                    return Settings["numPerPage"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "NumPerPage", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "numPerPage", value.ToString());
             }
         }
 
@@ -50,14 +50,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("RoleName"))
-                    return Settings["RoleName"].ToString();
+                if (Settings.Contains("roleName"))
+                    return Settings["roleName"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "RoleName", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "roleName", value.ToString());
             }
         }
 
@@ -65,14 +65,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("ReportsRole"))
-                    return Settings["ReportsRole"].ToString();
+                if (Settings.Contains("reportsRole"))
+                    return Settings["reportsRole"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "ReportsRole", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "reportsRole", value.ToString());
             }
         }
 
@@ -80,14 +80,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("MergeRole"))
-                    return Settings["MergeRole"].ToString();
+                if (Settings.Contains("mergeRole"))
+                    return Settings["mergeRole"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "MergeRole", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "mergeRole", value.ToString());
             }
         }
 
@@ -95,14 +95,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("EmailFrom"))
-                    return Settings["EmailFrom"].ToString();
+                if (Settings.Contains("emailFrom"))
+                    return Settings["emailFrom"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "EmailFrom", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "emailFrom", value.ToString());
             }
         }
 
@@ -110,14 +110,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("EmailBCC"))
-                    return Settings["EmailBCC"].ToString();
+                if (Settings.Contains("emailBCC"))
+                    return Settings["emailBCC"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "EmailBCC", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "emailBCC", value.ToString());
             }
         }
 
@@ -125,14 +125,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("EmailSubject"))
-                    return Settings["EmailSubject"].ToString();
+                if (Settings.Contains("emailSubject"))
+                    return Settings["emailSubject"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "EmailSubject", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "emailSubject", value.ToString());
             }
         }
 
@@ -140,14 +140,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("EmailMessage"))
-                    return Settings["EmailMessage"].ToString();
+                if (Settings.Contains("emailMessage"))
+                    return Settings["emailMessage"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "EmailMessage", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "emailMessage", value.ToString());
             }
         }
 
@@ -155,14 +155,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("ShowSendPassword"))
-                    return Settings["ShowSendPassword"].ToString();
+                if (Settings.Contains("showSendPassword"))
+                    return Settings["showSendPassword"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "ShowSendPassword", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "showSendPassword", value.ToString());
             }
         }
 
@@ -170,14 +170,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("EmailNewUserCredentials"))
-                    return Settings["EmailNewUserCredentials"].ToString();
+                if (Settings.Contains("emailNewUserCredentials"))
+                    return Settings["emailNewUserCredentials"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "EmailNewUserCredentials", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "emailNewUserCredentials", value.ToString());
             }
         }
 
@@ -185,14 +185,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("ShowDonationHistory"))
-                    return Settings["ShowDonationHistory"].ToString();
+                if (Settings.Contains("showDonationHistory"))
+                    return Settings["showDonationHistory"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "ShowDonationHistory", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "showDonationHistory", value.ToString());
             }
         }
 
@@ -200,14 +200,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("EnableAddNewDonor"))
-                    return Settings["EnableAddNewDonor"].ToString();
+                if (Settings.Contains("enableAddNewDonor"))
+                    return Settings["enableAddNewDonor"].ToString();
                 return "";
             }
             set
             { 
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "EnableAddNewDonor", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "enableAddNewDonor", value.ToString());
             }
         }
 
@@ -215,14 +215,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("ReportServerURL"))
-                    return Settings["ReportServerURL"].ToString();
+                if (Settings.Contains("reportServerURL"))
+                    return Settings["reportServerURL"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "ReportServerURL", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "reportServerURL", value.ToString());
             }
         }
 
@@ -230,14 +230,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("ReportPath"))
-                    return Settings["ReportPath"].ToString();
+                if (Settings.Contains("reportPath"))
+                    return Settings["reportPath"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "ReportPath", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "reportPath", value.ToString());
             }
         }
 
@@ -245,14 +245,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("ReportCredentialsUserName"))
-                    return Settings["ReportCredentialsUserName"].ToString();
+                if (Settings.Contains("reportCredentialsUserName"))
+                    return Settings["reportCredentialsUserName"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "ReportCredentialsUserName", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "reportCredentialsUserName", value.ToString());
             }
         }
 
@@ -260,14 +260,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("ReportCredentialsPassword"))
-                    return Settings["ReportCredentialsPassword"].ToString();
+                if (Settings.Contains("reportCredentialsPassword"))
+                    return Settings["reportCredentialsPassword"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "ReportCredentialsPassword", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "reportCredentialsPassword", value.ToString());
             }
         }
 
@@ -275,14 +275,14 @@ namespace GIBS.DonationTracker.Components
         {
             get
             {
-                if (Settings.Contains("ReportCredentialsDomain"))
-                    return Settings["ReportCredentialsDomain"].ToString();
+                if (Settings.Contains("reportCredentialsDomain"))
+                    return Settings["reportCredentialsDomain"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateModuleSetting(ModuleId, "ReportCredentialsDomain", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "reportCredentialsDomain", value.ToString());
             }
         }
 

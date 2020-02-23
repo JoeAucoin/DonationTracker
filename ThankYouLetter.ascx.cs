@@ -21,11 +21,11 @@ namespace GIBS.Modules.DonationTracker
         int DonationID = Null.NullInteger;
         int PledgeID = Null.NullInteger;
 
-        public string _ReportCredentialsDomain = "";        //"ORLEANS";
-        public string _ReportCredentialsPassword = "";        //"CapeCod1";
-        public string _ReportCredentialsUserName = "";        //"inetFamilyPantry";
-        public string _ReportPath = "";        //"/FamilyPantry/DonationThankYouLetter";
-        public string _ReportServerURL = "";        //"http://orleans.gibs.com:8081/Reportserver";
+        public string _ReportCredentialsDomain = "";        
+        public string _ReportCredentialsPassword = "";        
+        public string _ReportCredentialsUserName = "";        
+        public string _ReportPath = "";        
+        public string _ReportServerURL = "";        
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -83,30 +83,30 @@ namespace GIBS.Modules.DonationTracker
         {
             try
             {
-                //  DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
-                if (Settings.Contains("ReportCredentialsDomain"))
+                
+                if (Settings.Contains("reportCredentialsDomain"))
                 {
-                    _ReportCredentialsDomain = Settings["ReportCredentialsDomain"].ToString();
+                    _ReportCredentialsDomain = Settings["reportCredentialsDomain"].ToString();
                 }
 
-                if (Settings.Contains("ReportCredentialsPassword"))
+                if (Settings.Contains("reportCredentialsPassword"))
                 {
-                    _ReportCredentialsPassword = Settings["ReportCredentialsPassword"].ToString();
+                    _ReportCredentialsPassword = Settings["reportCredentialsPassword"].ToString();
                 }
 
-                if (Settings.Contains("ReportCredentialsUserName"))
+                if (Settings.Contains("reportCredentialsUserName"))
                 {
-                    _ReportCredentialsUserName = Settings["ReportCredentialsUserName"].ToString();
+                    _ReportCredentialsUserName = Settings["reportCredentialsUserName"].ToString();
                 }
 
-                if (Settings.Contains("ReportPath"))
+                if (Settings.Contains("reportPath"))
                 {
-                    _ReportPath = Settings["ReportPath"].ToString();
+                    _ReportPath = Settings["reportPath"].ToString();
                 }
 
-                if (Settings.Contains("ReportServerURL"))
+                if (Settings.Contains("reportServerURL"))
                 {
-                    _ReportServerURL = Settings["ReportServerURL"].ToString();
+                    _ReportServerURL = Settings["reportServerURL"].ToString();
                 }
 
 

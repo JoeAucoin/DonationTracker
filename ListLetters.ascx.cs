@@ -55,14 +55,9 @@ namespace GIBS.Modules.DonationTracker
 
                 List<DonationTrackerInfo> items;
                 DonationTrackerController controller = new DonationTrackerController();
-                //  GiftCertController controller = new GiftCertController();
-
-                // items = controller.GetGiftCerts(this.ModuleId);
-
+                
                 items = controller.DonationTrackerLetterTemplate_List(this.ModuleId, showInactive);
 
-                // items = items.OrderBy("DriveDate","desc").ToList();
-                // var so = from controller s in items orderby s.DriveDate select s;
 
                 //bind the data
                 GridView1.DataSource = items;
