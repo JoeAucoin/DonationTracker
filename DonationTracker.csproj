@@ -211,6 +211,7 @@
     <None Include="SqlScripts\01.00.33.SqlDataProvider" />
     <None Include="SqlScripts\01.00.34.SqlDataProvider" />
     <None Include="SqlScripts\01.00.35.SqlDataProvider" />
+    <Content Include="JavaScript\jquery.maskedinput.js" />
     <Content Include="SqlScripts\01.00.52.SqlDataProvider" />
     <None Include="SqlScripts\01.00.37.SqlDataProvider" />
     <None Include="Uninstall.SqlDataProvider" />
@@ -237,7 +238,6 @@
     </Content>
     <Content Include="EditDonationTracker.ascx" />
     <Content Include="images\icon_money.png" />
-    <Content Include="JavaScript\jquery.maskedinput-1.3.js" />
     <Content Include="JavaScript\jquery.watermarkinput.js" />
     <Content Include="ListDrives.ascx" />
     <Content Include="ReportSearch.ascx" />
