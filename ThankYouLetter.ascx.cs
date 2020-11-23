@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Modules;
+using DotNetNuke.Entities.Users;
+using DotNetNuke.Entities.Controllers;
 using DotNetNuke.Services.Exceptions;
 using GIBS.DonationTracker.Components;
 using GIBS.Modules.DonationTracker.Components;
@@ -25,8 +27,10 @@ namespace GIBS.Modules.DonationTracker
         public string _ReportCredentialsPassword = "";        
         public string _ReportCredentialsUserName = "";        
         public string _ReportPath = "";        
-        public string _ReportServerURL = "";        
-
+        public string _ReportServerURL = "";
+        static string _DonorEmail = "";
+        public string _EmailSubject = "";
+        public string _EmailBCC = "";
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -109,6 +113,17 @@ namespace GIBS.Modules.DonationTracker
                     _ReportServerURL = Settings["reportServerURL"].ToString();
                 }
 
+                if (Settings.Contains("emailSubject"))
+                {
+                    _EmailSubject = Settings["emailSubject"].ToString();
+                }
+
+
+
+                if (Settings.Contains("emailBCC"))
+                {
+                    _EmailBCC = Settings["emailBCC"].ToString();
+                }
 
             }
             catch (Exception ex)
@@ -191,7 +206,8 @@ namespace GIBS.Modules.DonationTracker
 
                 DotNetNuke.Entities.Users.UserInfo DonationUser = DotNetNuke.Entities.Users.UserController.GetUserById(this.PortalId, RecordID);
 
-
+               
+                lblDebug.Text = _DonorEmail.ToString();
 
                 string BothNames = "";
                 if (DonationUser.Profile.GetPropertyValue("AdditionalFirstName") != null && DonationUser.Profile.GetPropertyValue("AdditionalFirstName").ToString().Length > 0)
@@ -464,7 +480,7 @@ namespace GIBS.Modules.DonationTracker
             try
             {
                 ReportViewer1.Visible = true;
-                string urlReportServer = _ReportServerURL.ToString();   // "http://orleans:8081/Reportserver"; //get from web config
+                string urlReportServer = _ReportServerURL.ToString();   
                 ReportViewer1.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Remote; // ProcessingMode will be Either Remote or Local
                 ReportViewer1.ServerReport.ReportServerUrl = new Uri(urlReportServer); //Set the ReportServer Url
                 ReportViewer1.ServerReport.ReportPath = _ReportPath.ToString(); //  get from the query string                
@@ -477,31 +493,14 @@ namespace GIBS.Modules.DonationTracker
                 {
                     param[k] = (ReportParameter)reportParam[k];
                 }
-                //
-
-                //ReportViewer1.ServerReport.ReportServerCredentials = new ReportServerCredentials("Administrator", "Bouyea9213", "Orleans");
+                
+                
                 ReportViewer1.ServerReport.ReportServerCredentials = new ReportServerCredentials(_ReportCredentialsUserName.ToString(), _ReportCredentialsPassword.ToString(), _ReportCredentialsDomain.ToString());
                 //pass parmeters to report
                 ReportViewer1.ServerReport.SetParameters(param); //Set Report Parameters
                 ReportViewer1.ServerReport.Refresh();
 
 
-                //Creating a PDF from a RDLC Report in the Background
-
-                //Warning[] warnings;
-                //string[] streamids;
-                //string mimeType;
-                //string encoding;
-                //string filenameExtension;
-
-                //byte[] bytes = ReportViewer1.LocalReport.Render(
-                //    "PDF", null, out mimeType, out encoding, out filenameExtension,
-                //    out streamids, out warnings);
-
-                //using (FileStream fs = new FileStream("output.pdf", FileMode.Create))
-                //{
-                //    fs.Write(bytes, 0, bytes.Length);
-                //}
 
             }
             catch (Exception ex)
@@ -737,7 +736,12 @@ namespace GIBS.Modules.DonationTracker
 
                 DotNetNuke.Entities.Users.UserInfo DonationUser = DotNetNuke.Entities.Users.UserController.GetUserById(this.PortalId, RecordID);
 
-
+                _DonorEmail = DonationUser.Email.ToString();
+                
+                if(_DonorEmail.ToString().Length < 1)
+                {
+                    btnEmail.Visible = false;
+                }
 
                 string _FullName = DonationUser.Profile.GetPropertyValue("Prefix") + " "
                     + DonationUser.FirstName + " "
@@ -848,6 +852,128 @@ namespace GIBS.Modules.DonationTracker
                 Exceptions.ProcessModuleLoadException(this, ex);
             }
         }
+
+        protected void btnEmail_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                lblDebug.Text = "";
+
+                DonationTrackerController controller = new DonationTrackerController();
+                DonationTrackerInfo item = new DonationTrackerInfo();
+
+                item.DonationID = Convert.ToInt32(hidDonationID.Value.ToString());
+
+                item.Letter = txtLetter.Text.ToString();
+                item.CreatedByUserID = this.UserId;
+                int _MyNewetterID = 0;
+                item.PledgeID = Convert.ToInt32(hidPledgeID.Value.ToString());
+                _MyNewetterID = controller.DonationTrackerLetterAdd(item);
+
+                hidLetterID.Value = _MyNewetterID.ToString();
+                txtLetter.Visible = false;
+                btnSave.Visible = false;
+                btnEmail.Visible = false;
+                ddlLetterTemplates.Visible = false;
+
+                //  lblDebug.Text = hidLetterID.Value.ToString();
+                lblDebug.Text = "Email Successfully Sent!";
+
+                HyperLinkReturnToDonor.Visible = true;
+                HyperLinkNewSearch.Visible = true;
+
+                SendEmail();
+
+
+            }
+            catch (Exception ex)
+            {
+                Exceptions.ProcessModuleLoadException(this, ex);
+            }
+        }
+
+
+        public void SendEmail()
+        {
+
+            try
+            {
+
+
+
+                // BUILD E-MAIL BODY
+
+                string EmailContent = "";
+
+                EmailContent = txtLetter.Text.ToString();
+
+                // FOR HTML EMAIL USE:      Regex.Replace(txtLetter.Text.ToString(), @"\r\n?|\n", "<br />");
+
+                   
+                //EMAIL THE DONOR
+                string EmailFrom = "";
+                string EmailSubject = "";
+
+                //if (settingsData.EmailFrom.Length > 1)
+                //{
+                //    EmailFrom = settingsData.EmailFrom.ToString();
+                //}
+                //else
+                //{
+                //    EmailFrom = PortalSettings.Email.ToString();
+                //}
+
+                EmailSubject = _EmailSubject.ToString();
+                
+                // NEW
+
+                string SMTPUserName = DotNetNuke.Entities.Controllers.HostController.Instance.GetString("SMTPUsername");
+
+                EmailFrom = SMTPUserName.ToString();
+
+                string[] emptyStringArray = new string[0];
+
+                DotNetNuke.Services.Mail.Mail.SendMail(EmailFrom.Trim().ToString(), _DonorEmail.ToString(), "", _EmailBCC.ToString(),
+                    EmailFrom.ToString(), DotNetNuke.Services.Mail.MailPriority.Normal,
+                    EmailSubject.ToString(), DotNetNuke.Services.Mail.MailFormat.Text,
+                    System.Text.Encoding.ASCII, EmailContent.ToString(), emptyStringArray,
+                    "", "", "", "", true);
+
+
+                    // EMAIL THE settingsData.EmailNotify
+                    // ADD NOTE for ADMINS . . . . 
+                //    EmailContent += "<p><b>NOTE HERE.</b></p>";
+
+                    //if (settingsData.EmailNotify.Length > 1)
+                    //{
+                    //    string FromPurchaserEmail = item.FromEmail.ToString();
+                    //    string emailAddress = settingsData.EmailNotify.Replace(" ", "");
+                    //    string[] valuePair = emailAddress.Split(new char[] { ';' });
+                    //    //      string[] emailAttachemnts = null ;
+                    //    for (int i = 0; i <= valuePair.Length - 1; i++)
+                    //    {
+
+                    //        DotNetNuke.Services.Mail.Mail.SendMail(SMTPUserName.ToString(), valuePair[i].Trim().ToString(), "", "",
+                    //            FromPurchaserEmail.ToString(), DotNetNuke.Services.Mail.MailPriority.Normal, "New Order - " +
+                    //            settingsData.EmailSubject.ToString(), DotNetNuke.Services.Mail.MailFormat.Html, System.Text.Encoding.ASCII,
+                    //            EmailContent.ToString(), emptyStringArray, "", "", "", "", true);
+                    //        //MailFrom,             MailTo,                     Cc, Bcc,     ReplyTo,                                        Priority,                          Subject,           BodyFormat, BodyEncoding,           Body,                     Attachments, SMTPServer, SMTPAuthentication, SMTPUsername, SMTPPassword, SMTPEnableSSL
+                    //    }
+
+                    //}
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Exceptions.ProcessModuleLoadException(this, ex);
+            }
+
+        }
+
+
 
         public void DisableUnwantedExportFormats(ServerReport rvServer)
         {

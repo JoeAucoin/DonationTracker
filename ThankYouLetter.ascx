@@ -14,7 +14,7 @@
 
 <asp:TextBox ID="txtLetter" runat="server" TextMode="MultiLine" Height="400px" Width="100%" />
 <asp:Button ID="btnSave" runat="server" Text="Generate Thank You Letter" onclick="btnSave_Click" CssClass="btn btn-primary" />
-
+<asp:Button ID="btnEmail" runat="server" Text="E-Mail Thank You" onclick="btnEmail_Click" CssClass="btn btn-primary" />
 
 
 <asp:HiddenField ID="hidLetterID" runat="server" />

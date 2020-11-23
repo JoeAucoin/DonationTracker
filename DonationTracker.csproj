@@ -12,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GIBS.Modules.DonationTracker</RootNamespace>
     <AssemblyName>GIBS.Modules.DonationTracker</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -107,7 +107,9 @@
     <Compile Include="Components\DataProvider.cs" />
     <Compile Include="Components\DonationTrackerController.cs" />
     <Compile Include="Components\DonationTrackerInfo.cs" />
-    <Compile Include="Components\DonationTrackerSettings.cs" />
+    <Compile Include="Components\DonationTrackerSettings.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Components\GridViewExportUtil.cs" />
     <Compile Include="Components\GridViewGroup.cs" />
     <Compile Include="Components\GridViewGroupList.cs" />

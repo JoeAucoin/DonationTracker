@@ -329,9 +329,9 @@
                 </asp:TemplateField>
                  <asp:TemplateField HeaderText="">
                     <ItemTemplate>
-                        <asp:LinkButton ID="LinkButtonLetter" CommandArgument='<%# Eval("DonationID") %>' CommandName="Update" ToolTip="Generate a Thank You Letter for this donation."
+                        <asp:LinkButton ID="LinkButtonLetter" CommandArgument='<%# Eval("DonationID") %>' CommandName="Update" ToolTip="Generate a Thank You Letter/Email for this donation."
                             runat="server">
-                     Letter</asp:LinkButton>
+                     Thank You</asp:LinkButton>
                     </ItemTemplate>
 
                  </asp:TemplateField>
@@ -340,7 +340,7 @@
 <asp:TemplateField HeaderText="" ItemStyle-HorizontalAlign="Center" >
 <ItemTemplate>
 
-<asp:Image ID="Image1" runat="server" ToolTip="Previous Letter Generated" ImageUrl='<%# (Eval("LetterGenerated").Equals(true) ? "~/DesktopModules/GIBS/DonationTracker/Images/yes.png" : "~/DesktopModules/GIBS/DonationTracker/Images/no.png")%>' />
+<asp:Image ID="Image1" runat="server" ToolTip="Previous Letter/Email Generated" ImageUrl='<%# (Eval("LetterGenerated").Equals(true) ? "~/DesktopModules/GIBS/DonationTracker/Images/yes.png" : "~/DesktopModules/GIBS/DonationTracker/Images/no.png")%>' />
 
 
 </ItemTemplate>

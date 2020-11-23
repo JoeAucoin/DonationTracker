@@ -213,7 +213,7 @@
               </moduleControl>
               <moduleControl>
                 <controlKey>DonationMerge</controlKey>
-                <controlSrc>desktopmodules/gibs/donationtracker/DonationMerge.ascx</controlSrc>
+                <controlSrc>DesktopModules/GIBS/DonationTracker/DonationMerge.ascx</controlSrc>
                 <supportsPartialRendering>False</supportsPartialRendering>
                 <controlTitle>Merge Records</controlTitle>
                 <controlType>View</controlType>
@@ -235,7 +235,7 @@
               </moduleControl>
               <moduleControl>
                 <controlKey>ListDrives</controlKey>
-                <controlSrc>desktopmodules/gibs/donationtracker/ListDrives.ascx</controlSrc>
+                <controlSrc>DesktopModules/GIBS/DonationTracker/ListDrives.ascx</controlSrc>
                 <supportsPartialRendering>False</supportsPartialRendering>
                 <controlTitle>Donation Drives</controlTitle>
                 <controlType>View</controlType>
@@ -246,7 +246,7 @@
               </moduleControl>
               <moduleControl>
                 <controlKey>ListLetters</controlKey>
-                <controlSrc>desktopmodules/gibs/donationtracker/ListLetters.ascx</controlSrc>
+                <controlSrc>DesktopModules/GIBS/DonationTracker/ListLetters.ascx</controlSrc>
                 <supportsPartialRendering>False</supportsPartialRendering>
                 <controlTitle>Letter Templates</controlTitle>
                 <controlType>View</controlType>
@@ -290,9 +290,9 @@
               </moduleControl>
               <moduleControl>
                 <controlKey>ThankYouLetter</controlKey>
-                <controlSrc>desktopmodules/gibs/donationtracker/ThankYouLetter.ascx</controlSrc>
+                <controlSrc>DesktopModules/GIBS/DonationTracker/ThankYouLetter.ascx</controlSrc>
                 <supportsPartialRendering>False</supportsPartialRendering>
-                <controlTitle>Thank You Letter</controlTitle>
+                <controlTitle>Thank You Letter/Email</controlTitle>
                 <controlType>View</controlType>
                 <iconFile />
                 <helpUrl />

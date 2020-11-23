@@ -27,7 +27,7 @@ namespace GIBS.Modules.DonationTracker
                   //  DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
 
                  //   if (RoleName != null)
-                        if (Settings.Contains("roleName"))
+                    if (Settings.Contains("roleName"))
                         {
                         ddlRoles.SelectedValue = RoleName;
                     }
