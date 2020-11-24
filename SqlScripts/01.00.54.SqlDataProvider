@@ -180,6 +180,8 @@ BEGIN
 		,PledgeID = @PledgeID
 		,LetterType = @LetterType
         WHERE (DonationID = @DonationID) AND (PledgeID = @PledgeID)
+
+		Select LetterID from [GIBS_DonationTrackerLetters] WHERE (DonationID = @DonationID) AND (PledgeID = @PledgeID)
            
     END
 
