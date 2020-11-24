@@ -231,7 +231,7 @@ namespace GIBS.DonationTracker.Components
         {
             if (info.Letter.ToString() != string.Empty)
             {
-                return Convert.ToInt32(DataProvider.Instance().DonationTrackerLetterAdd(info.DonationID, info.Letter, info.CreatedByUserID, info.PledgeID));
+                return Convert.ToInt32(DataProvider.Instance().DonationTrackerLetterAdd(info.DonationID, info.Letter, info.CreatedByUserID, info.PledgeID, info.LetterType));
             }
             else
             {

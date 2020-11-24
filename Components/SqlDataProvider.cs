@@ -234,9 +234,9 @@ namespace GIBS.DonationTracker.Components
         //}	
 
         // THANK YOU LETTERS
-        public override int DonationTrackerLetterAdd(int donationID, string letter, int createdByUser, int portalID)
+        public override int DonationTrackerLetterAdd(int donationID, string letter, int createdByUser, int portalID, string letterType)
         {
-            return Convert.ToInt32(SqlHelper.ExecuteScalar(connectionString, GetFullyQualifiedName("DonationTrackerLetterAdd"), donationID, letter, createdByUser, portalID));
+            return Convert.ToInt32(SqlHelper.ExecuteScalar(connectionString, GetFullyQualifiedName("DonationTrackerLetterAdd"), donationID, letter, createdByUser, portalID, letterType));
         }
 
         public override IDataReader DonationTrackerLetterGet(int letterID)

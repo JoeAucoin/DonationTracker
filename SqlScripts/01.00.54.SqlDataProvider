@@ -1,0 +1,258 @@
+﻿
+IF COL_LENGTH('GIBS_DonationTrackerLetters','LetterType') IS NULL
+ BEGIN
+  /*COLUMN DOES NOT EXIST OR CALLER DOES NOT HAVE PERMISSION TO VIEW THE OBJECT*/
+  ALTER TABLE [dbo].[GIBS_DonationTrackerLetters] 
+ADD [LetterType] varChar(10)
+
+ END
+
+ GO
+
+
+ UPDATE       GIBS_DonationTrackerLetters
+SET                LetterType = 'PDF Letter'
+
+GO
+ 
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterGet_ByPledgeID]    Script Date: 11/24/2020 9:24:44 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterGet_ByPledgeID]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerLetterGet_ByPledgeID]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterGet_ByPledgeID]    Script Date: 11/24/2020 9:24:44 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterGet_ByPledgeID]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[GIBS_DonationTrackerLetterGet_ByPledgeID] AS' 
+END
+GO
+
+ALTER procedure [dbo].[GIBS_DonationTrackerLetterGet_ByPledgeID]
+
+	
+	@PledgeID	  int
+
+	
+as
+
+SELECT [LetterID]
+      ,[DonationID]
+      ,[Letter]
+      ,[PDFFile]
+      ,[CreatedByUser]
+      ,[CreatedDate]
+	  ,[PledgeID]
+	  ,GIBS_DonationTrackerLetters.LetterType
+  FROM [dbo].[GIBS_DonationTrackerLetters]
+	WHERE [PledgeID] = @PledgeID
+GO
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterGet_AllByUserID]    Script Date: 11/24/2020 9:23:00 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterGet_AllByUserID]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'ALTER procedure [dbo].[GIBS_DonationTrackerLetterGet_AllByUserID]
+
+	
+	@UserID	  int
+
+	
+as
+
+SELECT        
+
+coalesce(GIBS_DonationTracker.UserID,GIBS_DonationTrackerPledge.UserID) AS UserID,
+GIBS_DonationTrackerLetters.LetterID, GIBS_DonationTrackerLetters.DonationID,  GIBS_DonationTrackerLetters.PledgeID, GIBS_DonationTrackerLetters.Letter, 
+ coalesce(DDrive.DriveName,PDrive.DriveName) AS DriveName, GIBS_DonationTracker.DonationAmount, 
+                         GIBS_DonationTrackerPledge.PledgeAmount * GIBS_DonationTrackerPledge.NumberOfPayments AS TotalAmountPledged
+						 ,GIBS_DonationTrackerLetters.LetterType
+						 
+						 , GIBS_DonationTrackerLetters.CreatedDate
+FROM            GIBS_DonationTrackerLetters 
+
+left outer JOIN
+                         GIBS_DonationTrackerPledge ON GIBS_DonationTrackerLetters.PledgeID = GIBS_DonationTrackerPledge.PledgeID 
+						 
+left outer JOIN
+                         GIBS_DonationTracker ON GIBS_DonationTrackerLetters.DonationID = GIBS_DonationTracker.DonationID 
+
+left outer JOIN
+                         GIBS_DonationTrackerDrives PDrive ON GIBS_DonationTrackerPledge.DriveID = PDrive.DriveID 
+left outer JOIN
+                         GIBS_DonationTrackerDrives DDrive	ON GIBS_DonationTracker.DriveID = DDrive.DriveID
+
+WHERE GIBS_DonationTracker.UserID = @UserID OR GIBS_DonationTrackerPledge.UserID = @UserID
+
+Order BY GIBS_DonationTrackerLetters.CreatedDate DESC' 
+END
+GO
+
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterGet]    Script Date: 11/24/2020 9:22:17 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterGet]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'ALTER procedure [dbo].[GIBS_DonationTrackerLetterGet]
+
+	
+	@LetterID	  int
+
+	
+as
+
+SELECT [LetterID]
+      ,[DonationID]
+      ,[Letter]
+      ,[PDFFile]
+      ,[CreatedByUser]
+      ,[CreatedDate]
+	  ,[PledgeID]
+	  , LetterType
+  FROM [dbo].[GIBS_DonationTrackerLetters]
+	WHERE [LetterID] = @LetterID' 
+END
+GO
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterAdd]    Script Date: 11/24/2020 9:19:30 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerLetterAdd]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterAdd]    Script Date: 11/24/2020 9:19:30 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterAdd]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[GIBS_DonationTrackerLetterAdd] AS' 
+END
+GO
+
+ALTER procedure [dbo].[GIBS_DonationTrackerLetterAdd]
+(
+	@DonationID       int,
+	@Letter varchar(max),
+	
+	@CreatedByUser         int,
+	@PledgeID	int,
+	@LetterType varchar(10)
+)
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM [dbo].[GIBS_DonationTrackerLetters]
+        WHERE (DonationID = @DonationID) AND (PledgeID = @PledgeID)
+			
+    )
+    BEGIN
+        UPDATE [dbo].[GIBS_DonationTrackerLetters] set 
+		[Letter] = @Letter 
+		,[CreatedByUser] = @CreatedByUser
+		,[CreatedDate] = getdate()
+		,PledgeID = @PledgeID
+		,LetterType = @LetterType
+        WHERE (DonationID = @DonationID) AND (PledgeID = @PledgeID)
+           
+    END
+
+
+
+ELSE
+    BEGIN
+        INSERT INTO [dbo].[GIBS_DonationTrackerLetters]
+           ([DonationID]
+           ,[Letter]
+
+           ,[CreatedByUser]
+           ,[CreatedDate]
+		   ,[PledgeID]
+		   ,LetterType)
+
+			values (
+				@DonationID,
+				@Letter,
+				@CreatedByUser,
+				getdate(),
+				@PledgeID,
+				@LetterType
+			)
+			select SCOPE_IDENTITY()
+    END
+
+		
+END
+GO
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterGet_ByDonationID]    Script Date: 11/24/2020 9:43:31 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterGet_ByDonationID]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_DonationTrackerLetterGet_ByDonationID]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_DonationTrackerLetterGet_ByDonationID]    Script Date: 11/24/2020 9:43:31 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_DonationTrackerLetterGet_ByDonationID]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[GIBS_DonationTrackerLetterGet_ByDonationID] AS' 
+END
+GO
+
+ALTER procedure [dbo].[GIBS_DonationTrackerLetterGet_ByDonationID]
+
+	
+	@DonationID	  int
+
+	
+as
+
+SELECT [LetterID]
+      ,[DonationID]
+      ,[Letter]
+      ,[PDFFile]
+      ,[CreatedByUser]
+      ,[CreatedDate]
+	  ,[PledgeID]
+	  ,[LetterType]
+  FROM [dbo].[GIBS_DonationTrackerLetters]
+	WHERE [DonationID] = @DonationID
+GO
+
+
+
+
+

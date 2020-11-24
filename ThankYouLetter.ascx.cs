@@ -206,8 +206,8 @@ namespace GIBS.Modules.DonationTracker
 
                 DotNetNuke.Entities.Users.UserInfo DonationUser = DotNetNuke.Entities.Users.UserController.GetUserById(this.PortalId, RecordID);
 
-               
-                lblDebug.Text = _DonorEmail.ToString();
+
+                
 
                 string BothNames = "";
                 if (DonationUser.Profile.GetPropertyValue("AdditionalFirstName") != null && DonationUser.Profile.GetPropertyValue("AdditionalFirstName").ToString().Length > 0)
@@ -321,7 +321,7 @@ namespace GIBS.Modules.DonationTracker
                     {
                         DonationTrackerInfo itemPreviousLetter = controller.DonationTrackerLetterGet_ByPledgeID(_PledgeID);
                         _myOriginalLetter = itemPreviousLetter.Letter.ToString();
-                        lblDebug.Text = "You are viewing a previously sent letter generated on " + itemPreviousLetter.CreatedDate.ToShortDateString();
+                        lblDebug.Text = "You are viewing a previously sent " + itemPreviousLetter.LetterType.ToString() + " generated on " + itemPreviousLetter.CreatedDate.ToShortDateString();
                     }
 
                     else
@@ -425,7 +425,7 @@ namespace GIBS.Modules.DonationTracker
                         DonationTrackerInfo itemPreviousLetter = controller.DonationTrackerLetterGet_ByDonationID(DonationID);
                         _myOriginalLetter = itemPreviousLetter.Letter.ToString();
                         hidLetterID.Value = itemPreviousLetter.LetterID.ToString();
-                        lblDebug.Text = "You are viewing a previously sent letter generated on " + itemPreviousLetter.CreatedDate.ToShortDateString();
+                        lblDebug.Text = "You are viewing a previously sent " + itemPreviousLetter.LetterType.ToString() + " generated on " + itemPreviousLetter.CreatedDate.ToShortDateString();
                     }
 
                     else
@@ -737,8 +737,9 @@ namespace GIBS.Modules.DonationTracker
                 DotNetNuke.Entities.Users.UserInfo DonationUser = DotNetNuke.Entities.Users.UserController.GetUserById(this.PortalId, RecordID);
 
                 _DonorEmail = DonationUser.Email.ToString();
-                
-                if(_DonorEmail.ToString().Length < 1)
+                LblEmail.Text = _DonorEmail.ToString();
+
+                if (_DonorEmail.ToString().Length < 1)
                 {
                     btnEmail.Visible = false;
                 }
@@ -828,6 +829,7 @@ namespace GIBS.Modules.DonationTracker
 
                 item.Letter = txtLetter.Text.ToString();
                 item.CreatedByUserID = this.UserId;
+                item.LetterType = "PDF Letter";
                 int _MyNewetterID = 0;
                 item.PledgeID = Convert.ToInt32(hidPledgeID.Value.ToString());
                 _MyNewetterID = controller.DonationTrackerLetterAdd(item);
@@ -858,7 +860,7 @@ namespace GIBS.Modules.DonationTracker
             try
             {
 
-                lblDebug.Text = "";
+            //    lblDebug.Text = "";
 
                 DonationTrackerController controller = new DonationTrackerController();
                 DonationTrackerInfo item = new DonationTrackerInfo();
@@ -867,6 +869,7 @@ namespace GIBS.Modules.DonationTracker
 
                 item.Letter = txtLetter.Text.ToString();
                 item.CreatedByUserID = this.UserId;
+                item.LetterType = "E-Mail";
                 int _MyNewetterID = 0;
                 item.PledgeID = Convert.ToInt32(hidPledgeID.Value.ToString());
                 _MyNewetterID = controller.DonationTrackerLetterAdd(item);
@@ -878,8 +881,8 @@ namespace GIBS.Modules.DonationTracker
                 ddlLetterTemplates.Visible = false;
 
                 //  lblDebug.Text = hidLetterID.Value.ToString();
-                lblDebug.Text = "Email Successfully Sent!";
-
+                LblEmail.Text = "E-Mail Successfully Sent!";
+                
                 HyperLinkReturnToDonor.Visible = true;
                 HyperLinkNewSearch.Visible = true;
 

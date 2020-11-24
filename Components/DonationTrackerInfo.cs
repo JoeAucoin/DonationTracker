@@ -46,6 +46,7 @@ namespace GIBS.DonationTracker.Components
         private string      postalCode;
         private string      company;
         private int         userID;
+        
         // LETTER
         private int         letterID;
         private string      letter;
@@ -53,6 +54,7 @@ namespace GIBS.DonationTracker.Components
         private string      pDFFile;
         private string letterName;
         private bool letterGenerated;
+        private string letterType;
 
 
         private string      userName;
@@ -512,6 +514,13 @@ namespace GIBS.DonationTracker.Components
             get { return letterGenerated; }
             set { letterGenerated = value; }
 
+        }
+
+        //
+        public string LetterType
+        {
+            get { return letterType; }
+            set { letterType = value; }
         }
 
         public string PDFFile

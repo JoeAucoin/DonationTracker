@@ -2,7 +2,9 @@
 <%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
     Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 <div style=" text-align:center;">
-<asp:Label ID="lblDebug" runat="server" Text=""></asp:Label></div>
+<asp:Label ID="lblDebug" runat="server" Text=""></asp:Label>
+    <br /><asp:Label ID="LblEmail" runat="server" Text=""></asp:Label>
+</div>
 <div style=" text-align:right;">
     <asp:HyperLink ID="HyperLinkNewSearch" runat="server" Visible="false" CssClass="btn btn-primary">New Search</asp:HyperLink>
     <asp:HyperLink ID="HyperLinkReturnToDonor" runat="server" CssClass="btn btn-primary">Return To Donor</asp:HyperLink> 

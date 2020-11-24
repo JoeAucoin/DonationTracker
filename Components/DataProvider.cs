@@ -79,7 +79,7 @@ namespace GIBS.DonationTracker.Components
         public abstract IDataReader DonationTrackerUserSearchRecordCount(int PortalID, int PageIndex, int PageSize, string searchField, string searchCriteria, string orderByField, string OrderByDirection);
        
         // THANK YOU LETTERS
-        public abstract int DonationTrackerLetterAdd(int donationID, string letter, int createdByUser, int portalID);
+        public abstract int DonationTrackerLetterAdd(int donationID, string letter, int createdByUser, int portalID, string letterType);
         public abstract IDataReader DonationTrackerLetterGet(int letterID);
         public abstract IDataReader DonationTrackerLetterGet_ByDonationID(int donationID);
         public abstract IDataReader DonationTrackerLetterGet_ByPledgeID(int pledgeID);

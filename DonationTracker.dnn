@@ -1,5 +1,5 @@
 ﻿<dotnetnuke type="Package" version="5.0">
-  <packages><package name="GIBS.DonationTracker" type="Module" version="1.0.53">
+  <packages><package name="GIBS.DonationTracker" type="Module" version="1.0.54">
   <friendlyName>Donation Tracker</friendlyName>
   <description>GIBS Food Bank Donation Tracker</description>
   <iconFile />
@@ -174,9 +174,19 @@
           <name>01.00.37.SqlDataProvider</name>
           <version>01.00.37</version>
         </script>
+        <script type="Install">
+          <path>SqlScripts</path>
+          <name>01.00.52.SqlDataProvider</name>
+          <version>01.00.52</version>
+        </script>
+        <script type="Install">
+          <path>SqlScripts</path>
+          <name>01.00.54.SqlDataProvider</name>
+          <version>01.00.54</version>
+        </script>
         <script type="UnInstall">
           <name>Uninstall.SqlDataProvider</name>
-          <version>1.0.53</version>
+          <version>1.0.54</version>
         </script>
       </scripts>
     </component>
